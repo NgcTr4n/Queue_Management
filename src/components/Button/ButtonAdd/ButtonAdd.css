@@ -1,0 +1,19 @@
+button.btn-add-new {
+  width: 72px;
+  display: inline-flex;
+  padding: 12px 4px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px 0px 0px 8px;
+  background: var(--orange-orange-50, #fff2e7);
+  box-shadow: 0px 0px 6px 0px #e7e9f2;
+  border: none;
+
+  color: var(--orange-orange-500, #ff7506);
+  text-align: center;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}

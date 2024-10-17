@@ -1,0 +1,51 @@
+div.react-datepicker {
+    width: 500px;
+    background-color: #ffffff; /* Màu nền cho calendar */
+    border: 1px solid #ccc; /* Đường viền */
+    border-radius: 4px; /* Bo tròn các góc */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Đổ bóng */
+    padding: 10px; /* Khoảng cách bên trong */
+  }
+  
+  div.react-datepicker__triangle {
+    display: none; /* Ẩn hình tam giác */
+  }
+  
+  div.react-datepicker__header {
+    background-color: #007bff; /* Màu nền cho header */
+    color: white; /* Màu chữ */
+    border: none; /* Ẩn đường viền */
+  }
+  
+  div.react-datepicker__day {
+    display: flex;
+    line-height: 34px; /* Chiều cao mỗi ngày */
+    font-size: 16px; /* Kích thước chữ */
+  }
+  
+  div.react-datepicker__day--today {
+    background-color: #e9ecef; /* Màu nền cho ngày hôm nay */
+  }
+  
+  div.react-datepicker__day--selected {
+    background-color: #007bff; /* Màu nền cho ngày đã chọn */
+    color: white; /* Màu chữ cho ngày đã chọn */
+  }
+  
+  div.react-datepicker__month {
+    margin: 0; /* Loại bỏ margin */
+  }
+  
+  .react-datepicker__navigation {
+    border: none; /* Ẩn đường viền cho nút điều hướng */
+    color: #007bff; /* Màu cho nút điều hướng */
+  }
+  
+  .react-datepicker__navigation--previous {
+    left: 10px; /* Đặt vị trí cho nút trước */
+  }
+  
+  .react-datepicker__navigation--next {
+    right: 10px; /* Đặt vị trí cho nút tiếp theo */
+  }
+  

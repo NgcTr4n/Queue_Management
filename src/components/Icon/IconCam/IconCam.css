@@ -1,0 +1,14 @@
+
+.bg-camera{
+    width: 45px;
+    height: 45px;
+    background: #FF7506;
+    border: 2px solid #fff;
+    border-radius: 50%;
+}
+.icon-camera{
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

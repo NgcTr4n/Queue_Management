@@ -1,0 +1,53 @@
+h1.display-1 {
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 900;
+  line-height: 54px;
+}
+h2.display-2 {
+  font-size: 34px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 51px; /* 150% */
+}
+h3.display-3 {
+  /* 24/24 Bold */
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 36px; /* 150% */
+}
+h4.display-4 {
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 33px; /* 150% */
+}
+h5.display-5 {
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 30px; /* 150% */
+}
+label.label {
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 27px;
+}
+.btn button {
+  display: flex;
+  width: 162px;
+  height: 40px;
+  padding: 10px 24px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px; /* 150% */
+  text-decoration: none;
+}

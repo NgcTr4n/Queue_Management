@@ -1,0 +1,67 @@
+.card-icon-text {
+  width: 72px;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 18px;
+  margin-left: 10px;
+}
+.bg_general_icon {
+  position: relative;
+}
+.dashboard-card {
+  padding-right: 28px;
+}
+div.card-body {
+  padding: 20px 7px 10px 5px;
+  border: none;
+  width: 179px;
+  height: 120px;
+}
+
+
+div.card.dashboard-card-level{
+    width: 179px;
+    height: 120px;
+    border: none;
+    border-radius: 10px;
+    background: var(--White, #fff);
+}
+.bg_icon {
+  position: absolute;
+  width: 45px;
+  height: 45px;
+  border: 1px solid #dadada;
+  border-radius: 50%;
+  opacity: 0.15;
+}
+.general_icon {
+  position: relative;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+h1.card-h1 {
+  color: var(--gray-gray-400-text, #535261);
+  /* 30/30 Bold */
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 45px; /* 150% */
+}
+.card-content {
+  padding-top: 12px;
+}
+.card-content-fluctuation {
+  width: 48px;
+  height: 15px;
+  border-radius: 7.181px;
+}
+.card-content-fluctuation .card-fluctuation-number {
+  font-size: 8px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 12px;
+}

@@ -1,0 +1,17 @@
+.btn-filled {
+  background: var(--orange-orange-400, #ff9138);
+  box-shadow: 0px 0px 6px 0px #e7e9f2;
+  border: none;
+  color: var(--white, #fff);
+}
+.btn-logout {
+  border-radius: 8px;
+  background: var(--orange-orange-50, #fff2e7);
+  border: none;
+  color: var(--orange-orange-400, #ff9138);
+}
+.btn-border {
+  box-shadow: 0px 0px 6px 0px #e7e9f2;
+  border: 1px solid var(--orange-orange-400, #ff9138);
+  color: var(--orange-orange-400, #ff9138);
+}

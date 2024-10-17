@@ -1,0 +1,78 @@
+.main-header {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.header-crumbs {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.header-inform {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.header-bell {
+  display: flex;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #fff2e7;
+  margin-right: 20px;
+}
+
+.bell-icon {
+  color: #ffac6a;
+  font-size: 17px;
+}
+
+.header-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50px;
+  margin-right: 10px;
+}
+.header-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.header-greeting {
+  font-size: 14px;
+  color: #888;
+}
+
+.header-username {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.breadcrumb-item {
+
+  color: #7e7d88;
+}
+
+
+.breadcrumb-icon {
+  margin: 0 8px;
+}
+
+.breadcrumb-item:last-child {
+  color: #ff9138;
+}
+
+.breadcrumb-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.breadcrumb-link:hover {
+  color: #ffac6a;
+}
+span.breadcrumb-item+.breadcrumb-item::before {
+    content: ""; /* Removes the separator */
+}
+

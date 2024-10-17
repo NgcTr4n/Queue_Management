@@ -1,0 +1,65 @@
+/* src/TableComponent.css */
+.table-striped {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 20px;
+}
+
+th {
+  padding: 16px 17px;
+  background-color: #ff7f50; /* Màu cam cho header */
+  color: white;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px;
+}
+
+td {
+  padding: 10px;
+  text-align: left;
+  color: var(--gray-gray-400-text, #535261);
+  /* 14/14 Reg */
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 21px; /* 150% */
+}
+
+
+tbody tr:nth-child(even) {
+  background-color: #ffefdb; /* Màu cam nhạt cho dòng chẵn */
+}
+
+tbody tr:nth-child(odd) {
+  background-color: white; /* Màu trắng cho dòng lẻ */
+}
+
+.pagination-container {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.pagination-container button {
+  margin: 0 5px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.pagination-container button.active {
+  background-color: #ff7f50; /* Nổi bật trang hiện tại */
+  color: white;
+}
+
+.arrow-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+}
