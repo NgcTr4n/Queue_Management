@@ -9,6 +9,7 @@ import Report from "../pages/Report/Report"
 import Service from "../pages/Service/Service"
 import Account from "../pages/Account/Account"
 import DeviceAdd from "../pages/Device/DeviceAdd"
+import ServiceAdd from "../pages/Service/ServiceAdd"
 
 
 export const router = createBrowserRouter([
@@ -48,6 +49,10 @@ export const router = createBrowserRouter([
     {
         path: "/service",
         element: <Service/>
+    },
+    {
+        path: "/service/add",
+        element: <ServiceAdd/>
     },
     {
         path: "/account",

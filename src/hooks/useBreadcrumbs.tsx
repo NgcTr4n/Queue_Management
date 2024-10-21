@@ -12,6 +12,7 @@ const breadcrumbConfig: Record<string, string[]> = {
     '/device': ['Thiết bị', 'Danh sách thiết bị'],
     '/device/add': ['Thiết bị', 'Danh sách thiết bị', 'Thêm thiết bị'],
     '/service': ['Dịch vụ', 'Danh sách dịch vụ'],
+    '/service/add': ['Dịch vụ', 'Danh sách dịch vụ', 'Thêm dịch vụ'],
     '/number': ['Cấp số', 'Danh sách cấp số'],
     '/report': ['Báo cáo', 'Lập báo cáo'],
     '/account': ['Thông tin cá nhân']
@@ -23,6 +24,8 @@ export const breadcrumbPaths: Record<string, string[]> = {
     '/device': ['/device'],
     '/device/add': ['/device', '/device', '/device/add'],
     '/service': ['/service'],
+    '/service/add': ['/service', '/service', '/service/add'],
+
     '/number': ['/number'],
     '/report': ['/report'],
     '/account': ['/account']

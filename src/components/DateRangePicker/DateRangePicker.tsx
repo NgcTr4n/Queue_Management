@@ -2,7 +2,9 @@ import React, { useRef, useState } from 'react';
 import { Form, Row, Col } from 'react-bootstrap';
 import './DateRangePicker.css'; 
 import DatePicker from 'react-datepicker';
-import './custom-datepicker.css'; 
+import "react-datepicker/dist/react-datepicker.css";
+
+// import './custom-datepicker.css'; 
 
 
 const DateRangePicker: React.FC = () => {
