@@ -1,0 +1,32 @@
+input#autoIncrement.form-control,
+input#prefix.form-control,
+input#suffix.form-control {
+  width: 65px;
+}
+label.form-check-label {
+  width: 125px;
+  margin-left: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.form-check .form-check-input {
+  width: 20px;
+  height: 20px;
+}
+div.form-check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+input.form-check-input:checked {
+  background-color: #4277ff;
+  border-color: #4277ff;
+}
+div.col-sm-auto {
+  height: 44px;
+}
+.number-rule-form label {
+  padding-top: 13px;
+  padding-left: 4px;
+}

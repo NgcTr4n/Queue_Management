@@ -5,7 +5,6 @@ import "./DeviceAdd.css";
 import ButtonFormAdd from "../../components/Button/ButtonForm/ButtonFormAdd/ButtonFormAdd";
 import ButtonFormCancel from "../../components/Button/ButtonForm/ButtonFormCancel/ButtonFormCancel";
 const optionsDevice = [
-  
   { label: "Kiosk", value: "kiosk" },
   { label: "Display counter", value: "displaycounter" },
 ];
@@ -109,30 +108,32 @@ const DeviceAdd = () => {
                   </form>
                 </div>
                 <div className="form-group device-add-form">
-                      <label className="label" htmlFor="dichvusudung">
-                        Dịch vụ sử dụng: <span style={{ color: "#FF4747" }}>*</span>
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="dichvusudung"
-                        name="dichvusudung"
-                        placeholder="Nhập dịch vụ sử dúng"
-                      />
-                    </div>
+                  <label className="label" htmlFor="dichvusudung">
+                    Dịch vụ sử dụng: <span style={{ color: "#FF4747" }}>*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="dichvusudung"
+                    name="dichvusudung"
+                    placeholder="Nhập dịch vụ sử dúng"
+                  />
+                </div>
               </div>
-              <p><span style={{color:"#FF4747"}}>*</span>Là trường thông tin bắt buộc</p>
+              <p>
+                <span style={{ color: "#FF4747" }}>*</span>Là trường thông tin
+                bắt buộc
+              </p>
             </div>
-
           </div>
-            <div className="btn-form-footer d-flex align-items-center justify-content-center">
-              <div className="btn-form-footer-cancel p-2">
-              <ButtonFormCancel btn_name="Hủy"/>
-              </div>
-              <div className="btn-form-footer-add p-2">
-                <ButtonFormAdd btn_name="Thêm thiết bị"/>
-              </div>
+          <div className="btn-form-footer d-flex align-items-center justify-content-center">
+            <div className="btn-form-footer-cancel p-2">
+              <ButtonFormCancel btn_name="Hủy bỏ" />
             </div>
+            <div className="btn-form-footer-add p-2">
+              <ButtonFormAdd btn_name="Thêm thiết bị" />
+            </div>
+          </div>
         </div>
       </div>
     </Layout>

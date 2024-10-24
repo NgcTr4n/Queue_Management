@@ -28,7 +28,6 @@ td {
   line-height: 21px; /* 150% */
 }
 
-
 tbody tr:nth-child(even) {
   background-color: #ffefdb; /* Màu cam nhạt cho dòng chẵn */
 }
@@ -45,6 +44,9 @@ tbody tr:nth-child(odd) {
 }
 
 .pagination-container button {
+  color: var(--gray-blue-gray-4---place-holder, #7e7d88);
+  font-weight: 600;
+  background-color: transparent;
   margin: 0 5px;
   padding: 5px 10px;
   border: none;

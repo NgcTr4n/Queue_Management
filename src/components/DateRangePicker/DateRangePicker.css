@@ -1,68 +1,65 @@
 .date-range-picker {
-    display: flex;
-    align-items: center;
-  }
-  .input-wrapper {
-    position: relative; 
-  }
-  
-  .custom-icon {
-    position: absolute;
-    
-    left: 10px; 
-    top: 50%; 
-    transform: translateY(-50%); 
-    pointer-events: none;
-  }
-  
-  input.date-input {
-    width: 150px;
-    height: 44px;
+  display: flex;
+  align-items: center;
+}
+.input-wrapper {
+  position: relative;
+}
 
-    padding-left: 40px;
-    color: transparent; /* Ẩn màu chữ */
-    text-shadow: 0 0 0 #6c757d; /* Màu chữ giống như placeholder */
-    border-radius: 8px;
-    border: 1.5px solid var(--gray-blue-gray-2---stroke, #D4D4D7);
-    background: #FFF;
-  }
-  
-  input.date-input::placeholder {
-    color: #6c757d; /* Màu cho placeholder */
-    opacity: 1; 
-  }
-  .custom-svg {
-    display: block;
-    width: 20px;
-    height: 20px;
-    z-index: 10; /* Thay đổi z-index nếu cần */
-  }
-  
-  
-  input.date-input:focus {
-    outline: none; /* Bỏ viền focus mặc định */
-    border-color: #80bdff; /* Đổi màu đường viền khi focus */
-  }
-  
-  input.date-input:valid {
-    color: #000; /* Khi có giá trị, đổi lại màu chữ */
-    text-shadow: none; /* Bỏ text-shadow */
-  }
-  
-  
-  /* Ẩn icon mặc định của input date */
+.custom-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 10;
+}
+
+input.date-input {
+  width: 150px;
+  height: 44px;
+  padding-left: 40px;
+  color: transparent; /* Ẩn màu chữ */
+  text-shadow: 0 0 0 #6c757d; /* Màu chữ giống như placeholder */
+  border-radius: 8px;
+  border: 1.5px solid var(--gray-blue-gray-2---stroke, #d4d4d7);
+  background: #fff;
+}
+
+input.date-input::placeholder {
+  color: #6c757d; /* Màu cho placeholder */
+  opacity: 1;
+}
+.custom-svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+  z-index: 10; /* Thay đổi z-index nếu cần */
+}
+
+input.date-input:focus {
+  outline: none;
+  border-color: #80bdff; /* Đổi màu đường viền khi focus */
+}
+
+input.date-input:valid {
+  color: #000; /* Khi có giá trị, đổi lại màu chữ */
+  text-shadow: none; /* Bỏ text-shadow */
+}
+
+/* Ẩn icon mặc định của input date */
 input[type="date"]::-webkit-calendar-picker-indicator {
-    display: none; /* Ẩn trong Chrome, Safari */
+  display: none; /* Ẩn trong Chrome, Safari */
 }
 
 input[type="date"]::-moz-inner-spin-button,
 input[type="date"]::-moz-calendar-picker-indicator {
-    display: none; /* Ẩn trong Firefox */
+  display: none; /* Ẩn trong Firefox */
 }
 
 /* Ẩn icon date trong Edge */
 input[type="date"] {
-    -webkit-appearance: none;
-    -moz-appearance: textfield;
-    appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+  appearance: none;
 }

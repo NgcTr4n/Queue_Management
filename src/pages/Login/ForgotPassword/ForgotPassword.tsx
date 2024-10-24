@@ -12,12 +12,11 @@ const ForgotPassword: React.FC = () => {
   const [rePassword, setRePassword] = useState("");
 
   const [error, setError] = useState(false);
-  const [passwordError, setPasswordError] = useState(false); 
+  const [passwordError, setPasswordError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showRePassword, setShowRePassword] = useState(false);
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const navigate = useNavigate();
-
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -33,7 +32,7 @@ const ForgotPassword: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     if (!isFormSubmitted) {
       if (!validateEmail(email)) {
         setError(true);
@@ -52,7 +51,7 @@ const ForgotPassword: React.FC = () => {
       }
     }
   };
-  
+
   return (
     <div className="login-container">
       <div className="login-left">
@@ -64,7 +63,9 @@ const ForgotPassword: React.FC = () => {
             <form className="login-form" onSubmit={handleSubmit}>
               <div className="login-form-username">
                 <h4>Đặt lại mật khẩu</h4>
-                <label className="label">Vui lòng nhập email để đặt lại mật khẩu của bạn *</label>
+                <label className="label">
+                  Vui lòng nhập email để đặt lại mật khẩu của bạn *
+                </label>
                 <br />
                 <input
                   type="text"
@@ -72,50 +73,52 @@ const ForgotPassword: React.FC = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
-                {error &&    <div className="error-message">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="21"
-                    height="21"
-                    viewBox="0 0 21 21"
-                    fill="none"
-                  >
-                    <g clipPath="url(#clip0_11_4958)">
-                      <path
-                        d="M10.2281 18.8332C14.8305 18.8332 18.5614 15.1022 18.5614 10.4998C18.5614 5.89746 14.8305 2.1665 10.2281 2.1665C5.62574 2.1665 1.89478 5.89746 1.89478 10.4998C1.89478 15.1022 5.62574 18.8332 10.2281 18.8332Z"
-                        stroke="#E73F3F"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <path
-                        d="M10.228 13.8335H10.2364"
-                        stroke="#E73F3F"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <path
-                        d="M10.228 7.1665V10.4998"
-                        stroke="#E73F3F"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </g>
-                    <defs>
-                      <clipPath id="clip0_11_4958">
-                        <rect
-                          width="20"
-                          height="20"
-                          fill="white"
-                          transform="translate(0.228027 0.5)"
+                {error && (
+                  <div className="error-message">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="21"
+                      height="21"
+                      viewBox="0 0 21 21"
+                      fill="none"
+                    >
+                      <g clipPath="url(#clip0_11_4958)">
+                        <path
+                          d="M10.2281 18.8332C14.8305 18.8332 18.5614 15.1022 18.5614 10.4998C18.5614 5.89746 14.8305 2.1665 10.2281 2.1665C5.62574 2.1665 1.89478 5.89746 1.89478 10.4998C1.89478 15.1022 5.62574 18.8332 10.2281 18.8332Z"
+                          stroke="#E73F3F"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                         />
-                      </clipPath>
-                    </defs>
-                  </svg>
-                  <span> Email không hợp lệ</span>
-                </div>}
+                        <path
+                          d="M10.228 13.8335H10.2364"
+                          stroke="#E73F3F"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M10.228 7.1665V10.4998"
+                          stroke="#E73F3F"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </g>
+                      <defs>
+                        <clipPath id="clip0_11_4958">
+                          <rect
+                            width="20"
+                            height="20"
+                            fill="white"
+                            transform="translate(0.228027 0.5)"
+                          />
+                        </clipPath>
+                      </defs>
+                    </svg>
+                    <span> Email không hợp lệ</span>
+                  </div>
+                )}
               </div>
               <div className="btn-form">
                 <div className="btn-form-border">

@@ -24,8 +24,6 @@ const TableComponent: React.FC<TableComponentProps> = ({ columns, data }) => {
           {columns.map((column, index) => (
             <th key={index}>{column.label}</th>
           ))}
-          <th></th>
-          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -42,7 +40,9 @@ const TableComponent: React.FC<TableComponentProps> = ({ columns, data }) => {
                         height: "10px",
                         borderRadius: "50%",
                         backgroundColor:
-                          row[column.key] === "Hoạt động" ? "green" : "red",
+                          row[column.key] === "Hoạt động"
+                            ? "#34CD26"
+                            : "#EC3740",
                         marginRight: "5px",
                       }}
                     ></span>
@@ -57,7 +57,7 @@ const TableComponent: React.FC<TableComponentProps> = ({ columns, data }) => {
                         height: "10px",
                         borderRadius: "50%",
                         backgroundColor:
-                          row[column.key] === "Kết nối" ? "green" : "red",
+                          row[column.key] === "Kết nối" ? "#34CD26" : "#EC3740",
                         marginRight: "5px",
                       }}
                     ></span>
@@ -65,23 +65,40 @@ const TableComponent: React.FC<TableComponentProps> = ({ columns, data }) => {
                   </>
                 ) : column.key === "services" ? (
                   <>
-                  {row[column.key]}
-                  <br />
+                    {row[column.key]}
+                    <br />
                     <a
                       href={`/services/${row.deviceCode}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                    >Xem thêm</a>
-                    
+                    >
+                      Xem thêm
+                    </a>
+                  </>
+                ) : column.key === "statusLevel" ? (
+                  <>
+                    <span
+                      style={{
+                        display: "inline-block",
+                        width: "10px",
+                        height: "10px",
+                        borderRadius: "50%",
+                        backgroundColor:
+                          row[column.key] === "Đang chờ"
+                            ? "#4277FF"
+                            : row[column.key] === "Đã sử dụng"
+                            ? "#7E7D88"
+                            : "#E73F3F",
+                        marginRight: "5px",
+                      }}
+                    ></span>
+                    <span style={{ marginLeft: "2px" }}>{row[column.key]}</span>{" "}
                   </>
                 ) : (
                   row[column.key]
                 )}
               </td>
             ))}
-            <td><a href="">Chi tiết</a></td>
-            <td><a href="">Cập nhật</a></td>
-
           </tr>
         ))}
       </tbody>
