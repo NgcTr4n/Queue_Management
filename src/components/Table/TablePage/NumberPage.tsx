@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import TableComponent from "../TableComponent";
 import PaginationComponent from "../PaginationComponent";
+import { useNavigate } from "react-router-dom";
 
 type TableRow = {
   serialNumber: string;
@@ -14,6 +15,8 @@ type TableRow = {
 };
 
 const NumberPage: React.FC = () => {
+  const navigate = useNavigate();
+
   const columns = [
     { label: "STT", key: "serialNumber" },
     { label: "Tên khách hàng", key: "customerName" },
@@ -70,11 +73,17 @@ const NumberPage: React.FC = () => {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
+
+  const handleDetailClick = (serialNumber: string) => {
+    navigate(`/number/${serialNumber}`);
+  };
   const tableData = data.map((row) => ({
     ...row,
     action: (
       <div>
-        <a href="#!">Chi tiết</a>
+        <a href="" onClick={() => handleDetailClick(row.serialNumber)}>
+          Chi tiết
+        </a>
       </div>
     ),
   }));

@@ -1,0 +1,24 @@
+.role-add-form-function {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  background: var(--orange-orange-50, #fff2e7);
+  padding: 16px 0 32px 24px;
+}
+.role-add-form-function::-webkit-scrollbar {
+  width: 4px;
+  height: 85px;
+}
+.role-add-form-function::-webkit-scrollbar-track {
+  background: #f0e0d6;
+}
+
+.role-add-form-function::-webkit-scrollbar-thumb {
+  background-color: #ffc89b;
+  border-radius: 8px;
+}
+
+.role-add-form-function {
+  scrollbar-width: thin;
+  scrollbar-color: #ffc89b transparent;
+}

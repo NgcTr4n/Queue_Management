@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import TableComponent from "../TableComponent";
 import PaginationComponent from "../PaginationComponent";
+import { useNavigate } from "react-router-dom";
 
 type TableRow = {
   deviceCode: string;
@@ -13,6 +14,8 @@ type TableRow = {
 };
 
 const DevicePage: React.FC = () => {
+  const navigate = useNavigate();
+
   const columns = [
     { label: "Mã thiết bị", key: "deviceCode" },
     { label: "Tên thiết bị", key: "deviceName" },
@@ -162,11 +165,16 @@ const DevicePage: React.FC = () => {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
+  const handleDetailClick = (deviceCode: string) => {
+    navigate(`/device/${deviceCode}`);
+  };
   const tableData = data.map((row) => ({
     ...row,
     detail: (
       <div>
-        <a href="#!">Chi tiết</a>
+        <a href="" onClick={() => handleDetailClick(row.deviceCode)}>
+          Chi tiết
+        </a>
       </div>
     ),
     update: (

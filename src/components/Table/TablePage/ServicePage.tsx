@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import TableComponent from "../TableComponent";
 import PaginationComponent from "../PaginationComponent";
+import { useNavigate } from "react-router-dom";
 
 type TableRow = {
   serviceCode: string;
@@ -11,6 +12,7 @@ type TableRow = {
 };
 
 const ServicePage: React.FC = () => {
+  const navigate = useNavigate();
   const columns = [
     { label: "Mã dịch vụ", key: "serviceCode" },
     { label: "Tên dịch vụ", key: "serviceName" },
@@ -128,11 +130,16 @@ const ServicePage: React.FC = () => {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
+  const handleDetailClick = (serviceCode: string) => {
+    navigate(`/service/${serviceCode}`);
+  };
   const tableData = data.map((row) => ({
     ...row,
     detail: (
       <div>
-        <a href="#!">Chi tiết</a>
+        <a href="" onClick={() => handleDetailClick(row.serviceCode)}>
+          Chi tiết
+        </a>
       </div>
     ),
     update: (

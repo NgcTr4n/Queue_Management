@@ -11,6 +11,13 @@ import Account from "../pages/Account/Account";
 import DeviceAdd from "../pages/Device/DeviceAdd";
 import ServiceAdd from "../pages/Service/ServiceAdd";
 import LevelAdd from "../pages/Number/LevelAdd";
+import RoleManagement from "../pages/RoleManagement/RoleManagement";
+import AccountManagement from "../pages/AccountManagement/AccountManagement";
+import DeviceDetailPage from "../pages/Device/DeviceDetailPage";
+import LevelDetail from "../pages/Number/LevelDetail";
+import ServiceDetail from "../pages/Service/ServiceDetail";
+import RoleAdd from "../pages/RoleManagement/RoleAdd";
+import AccountManagementAdd from "../pages/AccountManagement/AccountManagementAdd";
 
 export const router = createBrowserRouter([
   {
@@ -34,6 +41,10 @@ export const router = createBrowserRouter([
     element: <DeviceAdd />,
   },
   {
+    path: "/device/:deviceCode",
+    element: <DeviceDetailPage />,
+  },
+  {
     path: "/number",
     element: <NumberManage />,
   },
@@ -42,12 +53,32 @@ export const router = createBrowserRouter([
     element: <LevelAdd />,
   },
   {
+    path: "/number/:serialNumber",
+    element: <LevelDetail />,
+  },
+  {
     path: "/report",
     element: <Report />,
   },
   {
-    path: "/userlog",
+    path: "/setting/userlog",
     element: <UserLog />,
+  },
+  {
+    path: "/setting/rolemanagement",
+    element: <RoleManagement />,
+  },
+  {
+    path: "/setting/rolemanagement/add",
+    element: <RoleAdd />,
+  },
+  {
+    path: "/setting/accountmanagement",
+    element: <AccountManagement />,
+  },
+  {
+    path: "/setting/accountmanagement/add",
+    element: <AccountManagementAdd />,
   },
   {
     path: "/service",
@@ -56,6 +87,10 @@ export const router = createBrowserRouter([
   {
     path: "/service/add",
     element: <ServiceAdd />,
+  },
+  {
+    path: "/service/:serviceCode",
+    element: <ServiceDetail />,
   },
   {
     path: "/account",

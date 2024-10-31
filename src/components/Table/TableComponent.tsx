@@ -94,6 +94,25 @@ const TableComponent: React.FC<TableComponentProps> = ({ columns, data }) => {
                     ></span>
                     <span style={{ marginLeft: "2px" }}>{row[column.key]}</span>{" "}
                   </>
+                ) : column.key === "serviceStatus" ? (
+                  <>
+                    <span
+                      style={{
+                        display: "inline-block",
+                        width: "10px",
+                        height: "10px",
+                        borderRadius: "50%",
+                        backgroundColor:
+                          row[column.key] === "Đã hoàn thành"
+                            ? "#34CD26"
+                            : row[column.key] === "Đang thực hiện"
+                            ? "#5490EB"
+                            : "#6C7585",
+                        marginRight: "5px",
+                      }}
+                    ></span>
+                    <span style={{ marginLeft: "2px" }}>{row[column.key]}</span>{" "}
+                  </>
                 ) : (
                   row[column.key]
                 )}

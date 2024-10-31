@@ -242,8 +242,13 @@ const navLinks: NavLink[] = [
         />
       </svg>
     ),
+    subMenu: [
+      { name: "Quản lý vai trò", link: "/setting/rolemanagement" },
+      { name: "Quản lý tài khoản", link: "/setting/accountmanagement" },
+      { name: "Nhật ký người dùng", link: "/setting/userlog" },
+    ],
     name: "Cài đặt hệ thống",
-    link: "/userlog",
+    link: "/",
     icon1: (
       <svg
         xmlns="http://www.w3.org/2000/svg"

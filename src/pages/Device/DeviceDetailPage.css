@@ -1,0 +1,19 @@
+.device-detail-main {
+  padding: 16px 24px 300px 24px;
+  background: #fff;
+  border-radius: 16px;
+  background: var(--White, #fff);
+  /* Shadowbox */
+  box-shadow: 2px 2px 8px 0px rgba(232, 239, 244, 0.8);
+}
+.device-details p {
+  font-family: Nunito;
+  font-size: 16px;
+  font-style: normal;
+  line-height: 24px;
+  font-weight: 400;
+  color: var(--gray-gray-400-text, #535261);
+}
+.device-detail p strong {
+  color: var(--gray-gray-500, #282739);
+}

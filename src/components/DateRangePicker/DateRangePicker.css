@@ -5,7 +5,9 @@
 .input-wrapper {
   position: relative;
 }
-
+div.col-auto {
+  padding: 0;
+}
 .custom-icon {
   position: absolute;
   left: 10px;
