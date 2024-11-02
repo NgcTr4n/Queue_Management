@@ -18,6 +18,10 @@ import LevelDetail from "../pages/Number/LevelDetail";
 import ServiceDetail from "../pages/Service/ServiceDetail";
 import RoleAdd from "../pages/RoleManagement/RoleAdd";
 import AccountManagementAdd from "../pages/AccountManagement/AccountManagementAdd";
+import ServiceUpdate from "../pages/Service/ServiceUpdate";
+import DeviceUpdate from "../pages/Device/DeviceUpdate";
+import RoleUpdate from "../pages/RoleManagement/RoleMangementUpdate";
+import AccountManagementUpdate from "../pages/AccountManagement/AccountManagementUpdate";
 
 export const router = createBrowserRouter([
   {
@@ -45,6 +49,10 @@ export const router = createBrowserRouter([
     element: <DeviceDetailPage />,
   },
   {
+    path: "/device/:deviceCode/update",
+    element: <DeviceUpdate />,
+  },
+  {
     path: "/number",
     element: <NumberManage />,
   },
@@ -69,6 +77,10 @@ export const router = createBrowserRouter([
     element: <RoleManagement />,
   },
   {
+    path: "/setting/rolemangament/:roleName/update",
+    element: <RoleUpdate />,
+  },
+  {
     path: "/setting/rolemanagement/add",
     element: <RoleAdd />,
   },
@@ -81,12 +93,20 @@ export const router = createBrowserRouter([
     element: <AccountManagementAdd />,
   },
   {
+    path: "/setting/accountmanagement/:accountName/update",
+    element: <AccountManagementUpdate />,
+  },
+  {
     path: "/service",
     element: <Service />,
   },
   {
     path: "/service/add",
     element: <ServiceAdd />,
+  },
+  {
+    path: "/service/:serviceCode/update",
+    element: <ServiceUpdate />,
   },
   {
     path: "/service/:serviceCode",

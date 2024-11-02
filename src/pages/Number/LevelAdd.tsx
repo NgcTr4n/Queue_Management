@@ -3,6 +3,7 @@ import Layout from "../../layout/Layout";
 import CustomDropdown from "../../components/Dropdown/CustomDropdown";
 import ButtonFormAdd from "../../components/Button/ButtonForm/ButtonFormAdd/ButtonFormAdd";
 import ButtonFormCancel from "../../components/Button/ButtonForm/ButtonFormCancel/ButtonFormCancel";
+import { useNavigate } from "react-router-dom";
 const optionsLevel = [
   { label: "Khám tim mạch", value: "timmach" },
   { label: "Khám sản - Phụ khoa", value: "sanphukhoa" },
@@ -10,8 +11,17 @@ const optionsLevel = [
   { label: "Khám tai mũi họng", value: "taimuihong" },
 ];
 const LevelAdd = () => {
+  const navigate = useNavigate();
+
   const handleSelect = (value: string) => {
     console.log("Selected value:", value);
+  };
+  const cancelPage = () => {
+    navigate("/number");
+  };
+  const addLevel = () => {
+    navigate("/number");
+    console.log("Add successfully");
   };
   return (
     <Layout>
@@ -51,10 +61,13 @@ const LevelAdd = () => {
                 <div className="col-md-4 device-add-form"></div>
               </div>
               <div className="btn-form-footer d-flex align-items-center justify-content-center">
-                <div className="btn-form-footer-cancel p-2">
+                <div
+                  className="btn-form-footer-cancel p-2"
+                  onClick={cancelPage}
+                >
                   <ButtonFormCancel btn_name="Hủy bỏ" />
                 </div>
-                <div className="btn-form-footer-add p-2">
+                <div className="btn-form-footer-add p-2" onClick={addLevel}>
                   <ButtonFormAdd btn_name="In số" />
                 </div>
               </div>

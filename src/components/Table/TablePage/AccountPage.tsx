@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import TableComponent from "../TableComponent";
 import PaginationComponent from "../PaginationComponent";
+import { useNavigate } from "react-router-dom";
 
 type TableRow = {
   accountName: string;
@@ -13,6 +14,8 @@ type TableRow = {
 };
 
 const AccountPage: React.FC = () => {
+  const navigate = useNavigate();
+
   const columns = [
     { label: "Tên đăng nhập", key: "accountName" },
     { label: "Họ tên", key: "fullName" },
@@ -73,11 +76,16 @@ const AccountPage: React.FC = () => {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
+  const handleUpdateClick = (accountName: string) => {
+    navigate(`/setting/accountmanagement/${accountName}/update`);
+  };
   const tableData = data.map((row) => ({
     ...row,
     update: (
       <div>
-        <a href="#!">Cập nhật</a>
+        <a href="" onClick={() => handleUpdateClick(row.accountName)}>
+          Cập nhật
+        </a>
       </div>
     ),
   }));

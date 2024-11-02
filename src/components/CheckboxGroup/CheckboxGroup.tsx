@@ -1,13 +1,40 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+
 type CheckboxGroupProps = {
   title: string;
   options: string[];
+  selectedOptions?: string[];
+  onChange: (selectedOptions: string[]) => void;
 };
-const CheckboxGroup: React.FC<CheckboxGroupProps> = ({ title, options }) => {
+
+const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
+  title,
+  options,
+  selectedOptions = [],
+  onChange,
+}) => {
   const [checked, setChecked] = useState<{ [key: string]: boolean }>({
-    all: false,
-    ...options.reduce((acc, option) => ({ ...acc, [option]: false }), {}),
+    all: selectedOptions.length === options.length,
+    ...options.reduce(
+      (acc, option) => ({ ...acc, [option]: selectedOptions.includes(option) }),
+      {}
+    ),
   });
+
+  // Sync internal state with selectedOptions prop
+  useEffect(() => {
+    setChecked({
+      all: selectedOptions.length === options.length,
+      ...options.reduce(
+        (acc, option) => ({
+          ...acc,
+          [option]: selectedOptions.includes(option),
+        }),
+        {}
+      ),
+    });
+  }, [selectedOptions, options]);
+
   const handleCheck = (option: string) => {
     setChecked((prev) => {
       const newChecked = { ...prev, [option]: !prev[option] };
@@ -20,9 +47,16 @@ const CheckboxGroup: React.FC<CheckboxGroupProps> = ({ title, options }) => {
         newChecked.all = options.every((opt) => newChecked[opt]);
       }
 
+      const updatedSelectedOptions = Object.keys(newChecked).filter(
+        (key) => key !== "all" && newChecked[key]
+      );
+
+      onChange(updatedSelectedOptions);
+
       return newChecked;
     });
   };
+
   return (
     <div className="mb-3">
       <h5 className="display-5" style={{ color: "#FF7506" }}>
@@ -47,7 +81,7 @@ const CheckboxGroup: React.FC<CheckboxGroupProps> = ({ title, options }) => {
       {options.map((option) => (
         <div
           key={option}
-          className="form-check d-flex- align-item-center justify-content-start"
+          className="form-check align-item-center justify-content-start"
         >
           <input
             type="checkbox"

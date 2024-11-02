@@ -1,11 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 import Layout from "../../layout/Layout";
 import "./Device.css";
 import CustomDropdown from "../../components/Dropdown/CustomDropdown";
 import SearchInput from "../../components/SearchInput/SearchInput"; // Import the new SearchInput component
 import ButtonAdd from "../../components/Button/ButtonAdd/ButtonAdd";
 import DevicePage from "../../components/Table/TablePage/DevicePage";
-
+const sampleDevices = [
+  {
+    deviceCode: "KIO_14",
+    deviceName: "Kiosk",
+    ipAddress: "192.168.1.23",
+    status: "Hoạt động",
+    connection: "Kết nối",
+    services: "Khám sức khỏe, Khám mắt...",
+  },
+  {
+    deviceCode: "KIO_15",
+    deviceName: "Kiosk",
+    ipAddress: "192.168.1.24",
+    status: "Ngưng hoạt động",
+    connection: "Mất kết nối",
+    services: "Khám tim mạch, Khám tiêu hóa...",
+  },
+];
 const optionActive = [
   { label: "Tất cả", value: "tatca" },
   { label: "Hoạt động", value: "hoatdong" },
@@ -19,14 +36,23 @@ const optionConnection = [
 ];
 
 const Device = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+
   const handleSelect = (value: string) => {
     console.log("Selected value:", value);
   };
 
   const handleSearch = (value: string) => {
+    setSearchTerm(value);
     console.log("Search input:", value);
   };
 
+  const filteredDevices = sampleDevices.filter(
+    (device) =>
+      device.deviceCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      device.deviceName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      device.status.toLowerCase().includes(searchTerm.toLowerCase())
+  );
   return (
     <Layout>
       <div className="container">
@@ -74,7 +100,7 @@ const Device = () => {
                 <div className="row" style={{ marginTop: "16px" }}>
                   <div className="col">
                     <div className="device-list">
-                      <DevicePage />
+                      <DevicePage devices={filteredDevices} />
                     </div>
                   </div>
                   <div className="col-1" style={{ marginTop: "15px" }}>

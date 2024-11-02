@@ -6,7 +6,6 @@ import Button from "../../../components/Button/FilledButton";
 import FilledButton from "../../../components/Button/FilledButton";
 import { useNavigate } from "react-router-dom";
 
-
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
@@ -35,8 +34,8 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="login-container">
-      <div className="login-left">
+    <div className="login-container row">
+      <div className="login-left col">
         <div className="login-logo">
           <img src={logo} alt="Logo" />
         </div>
@@ -235,7 +234,7 @@ const Login: React.FC = () => {
           </form>
         </div>
       </div>
-      <div className="login-right">
+      <div className="login-right col">
         <div className="login-right-pic">
           <img src={loginPic} alt="Login Pic" />
         </div>

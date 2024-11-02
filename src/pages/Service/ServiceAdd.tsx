@@ -5,14 +5,25 @@ import "./ServiceAdd.css";
 import ButtonFormAdd from "../../components/Button/ButtonForm/ButtonFormAdd/ButtonFormAdd";
 import ButtonFormCancel from "../../components/Button/ButtonForm/ButtonFormCancel/ButtonFormCancel";
 import NumberRuleForm from "../../components/Number-rule/Number-rule";
+import { useNavigate } from "react-router-dom";
 const optionsDevice = [
   { label: "Kiosk", value: "kiosk" },
   { label: "Display counter", value: "displaycounter" },
 ];
 const ServiceAdd = () => {
+  const navigate = useNavigate();
+
   const handleSelect = (value: string) => {
     console.log("Selected value:", value);
   };
+  const cancelPage = () => {
+    navigate("/service");
+  };
+  const addService = () => {
+    navigate("/service");
+    console.log("Add sucessfully");
+  };
+
   return (
     <Layout>
       <div className="container">
@@ -94,10 +105,10 @@ const ServiceAdd = () => {
             </div>
           </div>
           <div className="btn-form-footer d-flex align-items-center justify-content-center">
-            <div className="btn-form-footer-cancel p-2">
+            <div className="btn-form-footer-cancel p-2" onClick={cancelPage}>
               <ButtonFormCancel btn_name="Hủy bỏ" />
             </div>
-            <div className="btn-form-footer-add p-2">
+            <div className="btn-form-footer-add p-2" onClick={addService}>
               <ButtonFormAdd btn_name="Thêm dịch vụ" />
             </div>
           </div>

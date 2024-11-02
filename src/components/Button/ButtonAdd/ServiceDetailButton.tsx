@@ -3,9 +3,16 @@ import "./ButtonAdd.css";
 import { useNavigate } from "react-router-dom";
 
 const ServiceDetailButton = () => {
+  const navigate = useNavigate();
+  const handleNavigate = () => {
+    navigate("/service");
+  };
+  const handleNavigate1 = () => {
+    navigate("/service/:serviceCode/update");
+  };
   return (
     <div className="btn-add">
-      <button className="btn-add-new">
+      <button className="btn-add-new" onClick={handleNavigate1}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -22,7 +29,7 @@ const ServiceDetailButton = () => {
         </svg>
         Cập nhật danh sách
       </button>
-      <button className="btn-add-new">
+      <button className="btn-add-new" onClick={handleNavigate}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="28"

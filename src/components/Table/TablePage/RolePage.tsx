@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import TableComponent from "../TableComponent";
 import PaginationComponent from "../PaginationComponent";
+import { useNavigate } from "react-router-dom";
 
 type TableRow = {
   roleName: string;
@@ -34,6 +35,7 @@ const RolePage: React.FC = () => {
       description: "Thực hiện nhiệm vụ về thống kê số liệu và tổng hợp số liệu",
     },
   ];
+  const navigate = useNavigate();
 
   const itemsPerPage = 8;
   const [currentPage, setCurrentPage] = useState(1);
@@ -50,11 +52,16 @@ const RolePage: React.FC = () => {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
+  const handleUpdateClick = (roleName: string) => {
+    navigate(`/setting/rolemangament/${roleName}/update`);
+  };
   const tableData = data.map((row) => ({
     ...row,
     update: (
       <div>
-        <a href="#!">Cập nhật</a>
+        <a href="" onClick={() => handleUpdateClick(row.roleName)}>
+          Cập nhật
+        </a>
       </div>
     ),
   }));

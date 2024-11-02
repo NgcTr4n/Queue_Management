@@ -8,32 +8,56 @@ import { useNavigate } from "react-router-dom";
 
 type RoleData = {
   roleName: string;
-  roleDescribe: string;
-  permissions: string[];
+  roleDesscribe: string;
+  permissionsA: string[];
+  permissionsB: string[];
 };
 
 const RoleUpdate = () => {
   const navigate = useNavigate();
   const [roleData, setRoleData] = useState<RoleData>({
     roleName: "",
-    roleDescribe: "",
-    permissions: [],
+    roleDesscribe: "",
+    permissionsA: [],
+    permissionsB: [],
   });
 
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setRoleData({
+      ...roleData,
+      [name]: value,
+    });
+  };
+
+  // Handle checkbox group changes for A
+  const handlePermissionsAChange = (selectedPermissions: string[]) => {
+    setRoleData({
+      ...roleData,
+      permissionsA: selectedPermissions,
+    });
+  };
+
+  // Handle checkbox group changes for B
+  const handlePermissionsBChange = (selectedPermissions: string[]) => {
+    setRoleData({
+      ...roleData,
+      permissionsB: selectedPermissions,
+    });
+  };
+
+  // Handle cancel
   const cancelPage = () => {
     navigate("/setting/rolemanagement");
   };
 
+  // Handle add/update role
   const addNew = () => {
+    // Here, you would typically send `roleData` to an API or backend
+    console.log("Role data:", roleData);
     navigate("/setting/rolemanagement");
-    console.log("Add successfully", roleData);
-  };
-
-  const handlePermissionChange = (selectedPermissions: string[]) => {
-    setRoleData((prevData) => ({
-      ...prevData,
-      permissions: selectedPermissions,
-    }));
   };
 
   return (
@@ -59,29 +83,24 @@ const RoleUpdate = () => {
                         type="text"
                         className="form-control"
                         id="tenvaitro"
-                        name="tenvaitro"
+                        name="roleName"
                         placeholder="Nhập tên vai trò"
-                        onChange={(e) =>
-                          setRoleData({ ...roleData, roleName: e.target.value })
-                        }
+                        value={roleData.roleName}
+                        onChange={handleInputChange}
                       />
                     </div>
                     <div className="form-group">
                       <label className="label" htmlFor="mota">
-                        Mô tả:{" "}
+                        Mô tả:
                       </label>
                       <textarea
                         className="form-control"
                         id="mota"
-                        name="mota"
+                        name="roleDesscribe"
                         placeholder="Nhập mô tả"
                         style={{ height: "160px" }}
-                        onChange={(e) =>
-                          setRoleData({
-                            ...roleData,
-                            roleDescribe: e.target.value,
-                          })
-                        }
+                        value={roleData.roleDesscribe}
+                        onChange={handleInputChange}
                       />
                     </div>
                   </form>
@@ -102,14 +121,14 @@ const RoleUpdate = () => {
                     <CheckboxGroup
                       title="Nhóm chức năng A"
                       options={["x", "y", "z"]}
-                      selectedOptions={roleData.permissions}
-                      onChange={handlePermissionChange}
+                      selectedOptions={roleData.permissionsA}
+                      onChange={handlePermissionsAChange}
                     />
                     <CheckboxGroup
                       title="Nhóm chức năng B"
-                      options={["x", "y", "z"]}
-                      selectedOptions={roleData.permissions}
-                      onChange={handlePermissionChange}
+                      options={["a", "b", "c"]}
+                      selectedOptions={roleData.permissionsB}
+                      onChange={handlePermissionsBChange}
                     />
                   </div>
                 </div>

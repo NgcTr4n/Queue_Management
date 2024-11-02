@@ -7,17 +7,21 @@ interface Option {
 }
 
 interface CustomDropdownProps {
-  options: Option[];
+  options: { label: string; value: string }[];
   onSelect: (value: string) => void;
+  selectedValue?: string;
   style?: React.CSSProperties;
 }
 
 const CustomDropdown: React.FC<CustomDropdownProps> = ({
   options,
   onSelect,
-  style
+  selectedValue,
+  style,
 }) => {
-  const [selected, setSelected] = useState(options[0].label); // Default to the first option
+  const [selected, setSelected] = useState<string>(
+    selectedValue || options[0].label
+  );
   const [isOpen, setIsOpen] = useState(false);
 
   const handleSelect = (option: Option) => {
@@ -29,9 +33,10 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
   return (
     <div
       className={`custom-dropdown ${isOpen ? "open" : ""}`}
-      onClick={() => setIsOpen(!isOpen)} style={style}
+      onClick={() => setIsOpen(!isOpen)}
+      style={style}
     >
-      <div className="custom-dropdown-toggle" >
+      <div className="custom-dropdown-toggle">
         {selected}
         <span className="custom-arrow">
           <svg

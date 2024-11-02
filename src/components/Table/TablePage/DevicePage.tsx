@@ -12,8 +12,11 @@ type TableRow = {
   connection: string;
   services: string;
 };
+type DevicePageProps = {
+  devices: TableRow[];
+};
 
-const DevicePage: React.FC = () => {
+const DevicePage: React.FC<DevicePageProps> = ({ devices }) => {
   const navigate = useNavigate();
 
   const columns = [
@@ -168,7 +171,10 @@ const DevicePage: React.FC = () => {
   const handleDetailClick = (deviceCode: string) => {
     navigate(`/device/${deviceCode}`);
   };
-  const tableData = data.map((row) => ({
+  const handleUpdateClick = (deviceCode: string) => {
+    navigate(`/device/${deviceCode}/update`);
+  };
+  const tableData = devices.map((row) => ({
     ...row,
     detail: (
       <div>
@@ -179,7 +185,9 @@ const DevicePage: React.FC = () => {
     ),
     update: (
       <div>
-        <a href="#!">Cập nhật</a>
+        <a href="" onClick={() => handleUpdateClick(row.deviceCode)}>
+          Cập nhật
+        </a>
       </div>
     ),
   }));

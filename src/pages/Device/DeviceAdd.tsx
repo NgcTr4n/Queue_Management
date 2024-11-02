@@ -4,13 +4,23 @@ import CustomDropdown from "../../components/Dropdown/CustomDropdown";
 import "./DeviceAdd.css";
 import ButtonFormAdd from "../../components/Button/ButtonForm/ButtonFormAdd/ButtonFormAdd";
 import ButtonFormCancel from "../../components/Button/ButtonForm/ButtonFormCancel/ButtonFormCancel";
+import { useNavigate } from "react-router-dom";
 const optionsDevice = [
   { label: "Kiosk", value: "kiosk" },
   { label: "Display counter", value: "displaycounter" },
 ];
 const DeviceAdd = () => {
+  const navigate = useNavigate();
+
   const handleSelect = (value: string) => {
     console.log("Selected value:", value);
+  };
+  const cancelPage = () => {
+    navigate("/device");
+  };
+  const addDevice = () => {
+    navigate("/device");
+    console.log("Add device successfully");
   };
   return (
     <Layout>
@@ -127,10 +137,10 @@ const DeviceAdd = () => {
             </div>
           </div>
           <div className="btn-form-footer d-flex align-items-center justify-content-center">
-            <div className="btn-form-footer-cancel p-2">
+            <div className="btn-form-footer-cancel p-2" onClick={cancelPage}>
               <ButtonFormCancel btn_name="Hủy bỏ" />
             </div>
-            <div className="btn-form-footer-add p-2">
+            <div className="btn-form-footer-add p-2" onClick={addDevice}>
               <ButtonFormAdd btn_name="Thêm thiết bị" />
             </div>
           </div>

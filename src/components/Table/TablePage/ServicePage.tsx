@@ -133,6 +133,9 @@ const ServicePage: React.FC = () => {
   const handleDetailClick = (serviceCode: string) => {
     navigate(`/service/${serviceCode}`);
   };
+  const handleUpdateClick = (serviceCode: string) => {
+    navigate(`/service/${serviceCode}/update`);
+  };
   const tableData = data.map((row) => ({
     ...row,
     detail: (
@@ -144,7 +147,9 @@ const ServicePage: React.FC = () => {
     ),
     update: (
       <div>
-        <a href="#!">Cập nhật</a>
+        <a href="" onClick={() => handleUpdateClick(row.serviceCode)}>
+          Cập nhật
+        </a>
       </div>
     ),
   }));

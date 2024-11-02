@@ -1,6 +1,5 @@
-// src/TableComponent.tsx
 import React from "react";
-import "./TableComponent.css"; // Import your CSS for styles
+import "./TableComponent.css";
 
 type TableColumn = {
   label: string;
@@ -8,7 +7,7 @@ type TableColumn = {
 };
 
 type TableRow = {
-  [key: string]: any; // Use index signature for dynamic keys
+  [key: string]: any;
 };
 
 interface TableComponentProps {
