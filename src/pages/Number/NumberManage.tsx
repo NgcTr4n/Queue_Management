@@ -1,12 +1,42 @@
-import React from "react";
+import React, { useState } from "react";
 import Layout from "../../layout/Layout";
 // import "./Device.css";
 import CustomDropdown from "../../components/Dropdown/CustomDropdown";
-import SearchInput from "../../components/SearchInput/SearchInput"; // Import the new SearchInput component
+import SearchInput from "../../components/SearchInput/SearchInput";
 import ButtonAdd from "../../components/Button/ButtonAdd/ButtonAdd";
 import DevicePage from "../../components/Table/TablePage/DevicePage";
 import DateRangePicker from "../../components/DateRangePicker/DateRangePicker";
 import NumberPage from "../../components/Table/TablePage/NumberPage";
+
+const sampleLevel = [
+  {
+    serialNumber: "2010001",
+    customerName: "Lê Huỳnh Ái Vân",
+    serviceName: "Khám tim mạch",
+    issueTime: "14:35 - 07/11/2021",
+    expirationTime: "14:35 - 12/11/2021",
+    statusLevel: "Đang chờ",
+    source: "Kiosk",
+  },
+  {
+    serialNumber: "2010002",
+    customerName: "Huỳnh Ái Vân",
+    serviceName: "Khám sản - Phụ khoa",
+    issueTime: "14:35 - 07/11/2021",
+    expirationTime: "14:35 - 12/11/2021",
+    statusLevel: "Đã sử dụng",
+    source: "Kiosk",
+  },
+  {
+    serialNumber: "2010003",
+    customerName: "Lê Ái Vân",
+    serviceName: "Khám răng hàm mặt",
+    issueTime: "14:35 - 07/11/2021",
+    expirationTime: "14:35 - 12/11/2021",
+    statusLevel: "Đang chờ",
+    source: "Hệ thống",
+  },
+];
 
 const optionServicee = [
   { label: "Tất cả", value: "tatca" },
@@ -21,6 +51,7 @@ const optionStatus = [
   { label: "Đã sử dụng", value: "dasudung" },
   { label: "Bỏ qua", value: "boqua" },
 ];
+
 const optionPowerSupply = [
   { label: "Tất cả", value: "tatca" },
   { label: "Kiosk", value: "kiosk" },
@@ -28,13 +59,81 @@ const optionPowerSupply = [
 ];
 
 const NumberManage = () => {
-  const handleSelect = (value: string) => {
-    console.log("Selected value:", value);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("tatca");
+  const [selectedService, setSelectedService] = useState("tatca");
+  const [selectedPowerSupply, setSelectedPowerSupply] = useState("tatca");
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
+    null,
+    null,
+  ]); // Explicit type for date range
+  const handleSelectStatus = (value: string) => {
+    setSelectedStatus(value);
+    console.log("Selected status:", value);
+  };
+
+  const handleSelectService = (value: string) => {
+    setSelectedService(value);
+    console.log("Selected Service:", value);
+  };
+
+  const handlePowerSupply = (value: string) => {
+    setSelectedPowerSupply(value);
+    console.log("Selected PowerSupply:", value);
   };
 
   const handleSearch = (value: string) => {
+    setSearchTerm(value);
     console.log("Search input:", value);
   };
+
+  const handleDateRangeChange = (range: [Date | null, Date | null]) => {
+    setDateRange(range);
+    console.log("Selected Date Range:", range);
+  };
+
+  const filteredLevel = sampleLevel.filter((level) => {
+    const matchesSearchTerm =
+      level.serialNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      level.customerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      level.serviceName.toLowerCase().includes(searchTerm.toLowerCase());
+
+    const matchesStatus =
+      selectedStatus === "tatca" ||
+      (selectedStatus === "dangcho" && level.statusLevel === "Đang chờ") ||
+      (selectedStatus === "dasudung" && level.statusLevel === "Đã sử dụng") ||
+      (selectedStatus === "boqua" && level.statusLevel === "Bỏ qua");
+
+    const matchesService =
+      selectedService === "tatca" ||
+      (selectedService === "khamsanphukhoa" &&
+        level.serviceName === "Khám sản - Phụ khoa") ||
+      (selectedService === "ranghammat" &&
+        level.serviceName === "Khám răng hàm mặt") ||
+      (selectedService === "taimuihong" &&
+        level.serviceName === "Khám tai mũi họng");
+
+    const matchesPowerSupply =
+      selectedPowerSupply === "tatca" ||
+      (selectedPowerSupply === "kiosk" && level.source === "Kiosk") ||
+      (selectedPowerSupply === "hethong" && level.source === "Hệ thống");
+    const issueTime = new Date(level.issueTime.split(" - ")[1]); // Parse the issueTime to a Date object
+    const isWithinDateRange =
+      (!dateRange[0] && !dateRange[1]) || // No date range selected
+      (dateRange[0] && !dateRange[1] && issueTime >= dateRange[0]) || // Only start date selected
+      (dateRange[1] && !dateRange[0] && issueTime <= dateRange[1]) || // Only end date selected
+      (dateRange[0] &&
+        dateRange[1] &&
+        issueTime >= dateRange[0] &&
+        issueTime <= dateRange[1]);
+    return (
+      matchesSearchTerm &&
+      matchesStatus &&
+      matchesService &&
+      matchesPowerSupply &&
+      isWithinDateRange
+    );
+  });
 
   return (
     <Layout>
@@ -42,7 +141,7 @@ const NumberManage = () => {
         <div className="row">
           <div className="col">
             <h3 className="display-3" style={{ color: "#FF9138" }}>
-              Quản lý cấp số{" "}
+              Quản lý cấp số
             </h3>
             <div
               className="dashboard-statistical row"
@@ -56,7 +155,7 @@ const NumberManage = () => {
                       <CustomDropdown
                         style={{ width: "100%" }}
                         options={optionServicee}
-                        onSelect={handleSelect}
+                        onSelect={handleSelectService}
                       />
                     </div>
                   </div>
@@ -66,7 +165,7 @@ const NumberManage = () => {
                       <CustomDropdown
                         style={{ width: "100%" }}
                         options={optionStatus}
-                        onSelect={handleSelect}
+                        onSelect={handleSelectStatus}
                       />
                     </div>
                   </div>
@@ -76,14 +175,14 @@ const NumberManage = () => {
                       <CustomDropdown
                         style={{ width: "100%" }}
                         options={optionPowerSupply}
-                        onSelect={handleSelect}
+                        onSelect={handlePowerSupply}
                       />
                     </div>
                   </div>
                   <div className="col-4">
                     <p>Chọn thời gian</p>
                     <div className="d-flex align-items-center device-dropdown">
-                      <DateRangePicker />
+                      <DateRangePicker onChange={handleDateRangeChange} />
                     </div>
                   </div>
                   <div className="col-2 d-flex justify-content-end align-items-center">
@@ -99,7 +198,7 @@ const NumberManage = () => {
                 <div className="row" style={{ marginTop: "16px" }}>
                   <div className="col">
                     <div className="device-list">
-                      <NumberPage />
+                      <NumberPage level={filteredLevel} />
                     </div>
                   </div>
                   <div className="col-1" style={{ marginTop: "15px" }}>

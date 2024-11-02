@@ -10,8 +10,10 @@ type TableRow = {
   serviceDescribe: string;
   status: string;
 };
-
-const ServicePage: React.FC = () => {
+type ServicePageProps = {
+  services: TableRow[];
+};
+const ServicePage: React.FC<ServicePageProps> = ({ services }) => {
   const navigate = useNavigate();
   const columns = [
     { label: "Mã dịch vụ", key: "serviceCode" },
@@ -22,110 +24,18 @@ const ServicePage: React.FC = () => {
     { label: "", key: "update" },
   ];
 
-  const allData: TableRow[] = [
-    {
-      serviceCode: "KIO_01",
-      serviceName: "Kiosk",
-      serviceDescribe: "Hoạt động",
-      status: "Hoạt động",
-    },
-    {
-      serviceCode: "KIO_02",
-      serviceName: "Kiosk",
-      serviceDescribe: "Ngưng hoạt động",
-      status: "Ngưng hoạt động",
-    },
-    {
-      serviceCode: "KIO_03",
-      serviceName: "Kiosk",
-      serviceDescribe: "Hoạt động",
-      status: "Hoạt động",
-    },
-    {
-      serviceCode: "KIO_04",
-      serviceName: "Kiosk",
-      serviceDescribe: "Hoạt động",
-      status: "Hoạt động",
-    },
-    {
-      serviceCode: "KIO_05",
-      serviceName: "Kiosk",
-      serviceDescribe: "Ngưng hoạt động",
-      status: "Ngưng hoạt động",
-    },
-    {
-      serviceCode: "KIO_06",
-      serviceName: "Kiosk",
-      serviceDescribe: "Hoạt động",
-      status: "Hoạt động",
-    },
-    {
-      serviceCode: "KIO_07",
-      serviceName: "Kiosk",
-      serviceDescribe: "Ngưng hoạt động",
-      status: "Ngưng hoạt động",
-    },
-    {
-      serviceCode: "KIO_08",
-      serviceName: "Kiosk",
-      serviceDescribe: "Hoạt động",
-      status: "Hoạt động",
-    },
-    {
-      serviceCode: "KIO_09",
-      serviceName: "Kiosk",
-      serviceDescribe: "Ngưng hoạt động",
-      status: "Ngưng hoạt động",
-    },
-    {
-      serviceCode: "KIO_10",
-      serviceName: "Kiosk",
-      serviceDescribe: "Hoạt động",
-      status: "Hoạt động",
-    },
-    {
-      serviceCode: "KIO_11",
-      serviceName: "Kiosk",
-      serviceDescribe: "Ngưng hoạt động",
-      status: "Ngưng hoạt động",
-    },
-    {
-      serviceCode: "KIO_12",
-      serviceName: "Kiosk",
-      serviceDescribe: "Hoạt động",
-      status: "Hoạt động",
-    },
-    {
-      serviceCode: "KIO_13",
-      serviceName: "Kiosk",
-      serviceDescribe: "Ngưng hoạt động",
-      status: "Ngưng hoạt động",
-    },
-    {
-      serviceCode: "KIO_14",
-      serviceName: "Kiosk",
-      serviceDescribe: "Hoạt động",
-      status: "Hoạt động",
-    },
-    {
-      serviceCode: "KIO_15",
-      serviceName: "Kiosk",
-      serviceDescribe: "Ngưng hoạt động",
-      status: "Ngưng hoạt động",
-    },
-  ];
-
-  const itemsPerPage = 8;
+  const itemsPerPage = 8; // Define how many items to show per page
   const [currentPage, setCurrentPage] = useState(1);
-  const [data, setData] = useState<TableRow[]>([]);
+  const [paginatedServices, setPaginatedDevices] = useState<TableRow[]>([]);
 
   useEffect(() => {
+    // Update the paginated devices whenever the devices prop or currentPage changes
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    setData(allData.slice(startIndex, endIndex));
-  }, [currentPage]);
+    setPaginatedDevices(services.slice(startIndex, endIndex));
+  }, [services, currentPage]); // Dependency array includes devices
 
-  const totalPages = Math.ceil(allData.length / itemsPerPage);
+  const totalPages = Math.ceil(services.length / itemsPerPage);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -136,7 +46,7 @@ const ServicePage: React.FC = () => {
   const handleUpdateClick = (serviceCode: string) => {
     navigate(`/service/${serviceCode}/update`);
   };
-  const tableData = data.map((row) => ({
+  const tableData = paginatedServices.map((row) => ({
     ...row,
     detail: (
       <div>

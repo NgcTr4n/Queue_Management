@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../../layout/Layout";
 import CustomDropdown from "../../components/Dropdown/CustomDropdown";
 import ButtonFormAdd from "../../components/Button/ButtonForm/ButtonFormAdd/ButtonFormAdd";
 import ButtonFormCancel from "../../components/Button/ButtonForm/ButtonFormCancel/ButtonFormCancel";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 const optionsRole = [
   { label: "Kiosk", value: "kiosk" },
   { label: "Display counter", value: "displaycounter" },
@@ -14,7 +14,7 @@ const optionsStatus = [
   { label: "Ngưng hoạt động", value: "ngunghoatdong" },
 ];
 
-type RoleData = {
+type AccountData = {
   accountName: string;
   fullName: string;
   phoneNumber: string;
@@ -24,9 +24,18 @@ type RoleData = {
 };
 
 const AccountManagementUpdate = () => {
+  const { accountName, fullName, phoneNumber, email, roleName, status } =
+    useParams<{
+      accountName: string;
+      fullName: string;
+      phoneNumber: string;
+      email: string;
+      roleName: string;
+      status: string;
+    }>();
   const navigate = useNavigate();
 
-  const [accountData, setAccountData] = useState<RoleData>({
+  const [accountData, setAccountData] = useState<AccountData>({
     accountName: "",
     fullName: "",
     phoneNumber: "",
@@ -34,7 +43,20 @@ const AccountManagementUpdate = () => {
     roleName: "",
     status: "",
   });
-
+  useEffect(() => {
+    const fetchAccountData = async () => {
+      const mockData = {
+        roleName: roleName || "DEV001",
+        accountName: accountName || "Sample description", // Sample data
+        fullName: fullName || "Sample description", // Sample data
+        phoneNumber: phoneNumber || "Sample description", // Sample data
+        email: email || "Sample description", // Sample data
+        status: status || "Sample description", // Sample data
+      };
+      setAccountData(mockData);
+    };
+    fetchAccountData();
+  }, []); // Use empty array if this is only run on component mount
   const [password, setPassword] = useState("");
   const [rePassword, setRePassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);

@@ -7,6 +7,110 @@ import ButtonAdd from "../../components/Button/ButtonAdd/ButtonAdd";
 import DevicePage from "../../components/Table/TablePage/DevicePage";
 const sampleDevices = [
   {
+    deviceCode: "KIO_01",
+    deviceName: "Kiosk",
+    ipAddress: "192.168.1.10",
+    status: "Hoạt động",
+    connection: "Kết nối",
+    services: "Khám tim mạch, Khám mắt...",
+  },
+  {
+    deviceCode: "KIO_02",
+    deviceName: "Kiosk",
+    ipAddress: "192.168.1.11",
+    status: "Ngưng hoạt động",
+    connection: "Mất kết nối",
+    services: "Khám sức khỏe, Khám mắt...",
+  },
+  {
+    deviceCode: "KIO_03",
+    deviceName: "Kiosk",
+    ipAddress: "192.168.1.12",
+    status: "Hoạt động",
+    connection: "Kết nối",
+    services: "Khám tim mạch, Khám mắt...",
+  },
+  {
+    deviceCode: "KIO_04",
+    deviceName: "Kiosk",
+    ipAddress: "192.168.1.13",
+    status: "Hoạt động",
+    connection: "Kết nối",
+    services: "Khám sức khỏe, Khám mắt...",
+  },
+  {
+    deviceCode: "KIO_05",
+    deviceName: "Kiosk",
+    ipAddress: "192.168.1.14",
+    status: "Ngưng hoạt động",
+    connection: "Mất kết nối",
+    services: "Khám tim mạch, Khám mắt...",
+  },
+  {
+    deviceCode: "KIO_06",
+    deviceName: "Kiosk",
+    ipAddress: "192.168.1.15",
+    status: "Hoạt động",
+    connection: "Kết nối",
+    services: "Khám tổng quát, Khám tai mũi họng...",
+  },
+  {
+    deviceCode: "KIO_07",
+    deviceName: "Kiosk",
+    ipAddress: "192.168.1.16",
+    status: "Ngưng hoạt động",
+    connection: "Mất kết nối",
+    services: "Khám sức khỏe, Khám nội tiết...",
+  },
+  {
+    deviceCode: "KIO_08",
+    deviceName: "Kiosk",
+    ipAddress: "192.168.1.17",
+    status: "Hoạt động",
+    connection: "Kết nối",
+    services: "Khám tim mạch, Khám da liễu...",
+  },
+  {
+    deviceCode: "KIO_09",
+    deviceName: "Kiosk",
+    ipAddress: "192.168.1.18",
+    status: "Ngưng hoạt động",
+    connection: "Mất kết nối",
+    services: "Khám sức khỏe, Khám mắt...",
+  },
+  {
+    deviceCode: "KIO_10",
+    deviceName: "Kiosk",
+    ipAddress: "192.168.1.19",
+    status: "Hoạt động",
+    connection: "Kết nối",
+    services: "Khám tim mạch, Khám tâm lý...",
+  },
+  {
+    deviceCode: "KIO_11",
+    deviceName: "Kiosk",
+    ipAddress: "192.168.1.20",
+    status: "Ngưng hoạt động",
+    connection: "Mất kết nối",
+    services: "Khám nội tiết, Khám phụ khoa...",
+  },
+  {
+    deviceCode: "KIO_12",
+    deviceName: "Kiosk",
+    ipAddress: "192.168.1.21",
+    status: "Hoạt động",
+    connection: "Kết nối",
+    services: "Khám tổng quát, Khám mắt...",
+  },
+  {
+    deviceCode: "KIO_13",
+    deviceName: "Kiosk",
+    ipAddress: "192.168.1.22",
+    status: "Ngưng hoạt động",
+    connection: "Mất kết nối",
+    services: "Khám tim mạch, Khám thần kinh...",
+  },
+  {
     deviceCode: "KIO_14",
     deviceName: "Kiosk",
     ipAddress: "192.168.1.23",
@@ -37,22 +141,43 @@ const optionConnection = [
 
 const Device = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("tatca");
+  const [selectedConnection, setSelectedConnection] = useState("tatca");
 
-  const handleSelect = (value: string) => {
-    console.log("Selected value:", value);
+  const handleSelectStatus = (value: string) => {
+    setSelectedStatus(value);
+    console.log("Selected status:", value);
   };
 
+  const handleSelectConnection = (value: string) => {
+    setSelectedConnection(value);
+    console.log("Selected connection:", value);
+  };
   const handleSearch = (value: string) => {
     setSearchTerm(value);
     console.log("Search input:", value);
   };
 
-  const filteredDevices = sampleDevices.filter(
-    (device) =>
+  const filteredDevices = sampleDevices.filter((device) => {
+    const matchesSearchTerm =
       device.deviceCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
       device.deviceName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      device.status.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+      device.status.toLowerCase().includes(searchTerm.toLowerCase());
+
+    const matchesStatus =
+      selectedStatus === "tatca" ||
+      (selectedStatus === "hoatdong" && device.status === "Hoạt động") ||
+      (selectedStatus === "ngunghoatdong" &&
+        device.status === "Ngưng hoạt động");
+
+    const matchesConnection =
+      selectedConnection === "tatca" ||
+      (selectedConnection === "ketnoi" && device.connection === "Kết nối") ||
+      (selectedConnection === "matketnoi" &&
+        device.connection === "Mất kết nối");
+
+    return matchesSearchTerm && matchesStatus && matchesConnection;
+  });
   return (
     <Layout>
       <div className="container">
@@ -73,7 +198,7 @@ const Device = () => {
                       <CustomDropdown
                         style={{ width: "100%" }}
                         options={optionActive}
-                        onSelect={handleSelect}
+                        onSelect={handleSelectStatus}
                       />
                     </div>
                   </div>
@@ -83,7 +208,7 @@ const Device = () => {
                       <CustomDropdown
                         style={{ width: "100%" }}
                         options={optionConnection}
-                        onSelect={handleSelect}
+                        onSelect={handleSelectConnection}
                       />
                     </div>
                   </div>

@@ -7,47 +7,32 @@ import { useNavigate } from "react-router-dom";
 type TableRow = {
   roleName: string;
   userCount: number;
-  description: string;
+  roleDesscribe: string;
 };
-
-const RolePage: React.FC = () => {
+type RolePageProps = {
+  role: TableRow[];
+};
+const RolePage: React.FC<RolePageProps> = ({ role }) => {
+  const navigate = useNavigate();
   const columns = [
     { label: "Tên vai trò", key: "roleName" },
     { label: "Số người dùng", key: "userCount" },
-    { label: "Mô tả", key: "description" },
+    { label: "Mô tả", key: "roleDesscribe" },
     { label: "", key: "update" },
   ];
 
-  const allData: TableRow[] = [
-    {
-      roleName: "Kế toán",
-      userCount: 6,
-      description: "Thực hiện nhiệm vụ về thống kê số liệu và tổng hợp số liệu",
-    },
-    {
-      roleName: "Bác sĩ",
-      userCount: 6,
-      description: "Thực hiện nhiệm vụ về thống kê số liệu và tổng hợp số liệu",
-    },
-    {
-      roleName: "Lễ tân",
-      userCount: 6,
-      description: "Thực hiện nhiệm vụ về thống kê số liệu và tổng hợp số liệu",
-    },
-  ];
-  const navigate = useNavigate();
-
-  const itemsPerPage = 8;
+  const itemsPerPage = 8; // Define how many items to show per page
   const [currentPage, setCurrentPage] = useState(1);
-  const [data, setData] = useState<TableRow[]>([]);
+  const [paginatedRole, setPaginatedRole] = useState<TableRow[]>([]);
 
   useEffect(() => {
+    // Update the paginated devices whenever the devices prop or currentPage changes
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    setData(allData.slice(startIndex, endIndex));
-  }, [currentPage]);
+    setPaginatedRole(role.slice(startIndex, endIndex));
+  }, [role, currentPage]); // Dependency array includes devices
 
-  const totalPages = Math.ceil(allData.length / itemsPerPage);
+  const totalPages = Math.ceil(role.length / itemsPerPage);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -55,7 +40,7 @@ const RolePage: React.FC = () => {
   const handleUpdateClick = (roleName: string) => {
     navigate(`/setting/rolemangament/${roleName}/update`);
   };
-  const tableData = data.map((row) => ({
+  const tableData = paginatedRole.map((row) => ({
     ...row,
     update: (
       <div>

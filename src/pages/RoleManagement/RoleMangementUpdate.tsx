@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../../layout/Layout";
 import ButtonFormAdd from "../../components/Button/ButtonForm/ButtonFormAdd/ButtonFormAdd";
 import ButtonFormCancel from "../../components/Button/ButtonForm/ButtonFormCancel/ButtonFormCancel";
 import "./RoleAdd.css";
 import CheckboxGroup from "../../components/CheckboxGroup/CheckboxGroup";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 type RoleData = {
   roleName: string;
@@ -14,6 +14,11 @@ type RoleData = {
 };
 
 const RoleUpdate = () => {
+  const { roleName, roleDesscribe } = useParams<{
+    roleName: string;
+    roleDesscribe: string;
+  }>();
+
   const navigate = useNavigate();
   const [roleData, setRoleData] = useState<RoleData>({
     roleName: "",
@@ -22,40 +27,50 @@ const RoleUpdate = () => {
     permissionsB: [],
   });
 
+  useEffect(() => {
+    // Mock API call to fetch role data by roleName (you need to replace this with actual API call)
+    const fetchRoleData = async () => {
+      const mockData = {
+        roleName: roleName || "DEV001",
+        roleDesscribe: roleDesscribe || "Sample description", // Sample data
+        permissionsA: ["x"], // Sample permissions
+        permissionsB: ["a", "b"], // Sample permissions
+      };
+      setRoleData(mockData);
+    };
+    fetchRoleData();
+  }, []); // Use empty array if this is only run on component mount
+
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setRoleData({
-      ...roleData,
+    setRoleData((prev) => ({
+      ...prev,
       [name]: value,
-    });
+    }));
   };
 
-  // Handle checkbox group changes for A
   const handlePermissionsAChange = (selectedPermissions: string[]) => {
-    setRoleData({
-      ...roleData,
+    setRoleData((prev) => ({
+      ...prev,
       permissionsA: selectedPermissions,
-    });
+    }));
   };
 
-  // Handle checkbox group changes for B
   const handlePermissionsBChange = (selectedPermissions: string[]) => {
-    setRoleData({
-      ...roleData,
+    setRoleData((prev) => ({
+      ...prev,
       permissionsB: selectedPermissions,
-    });
+    }));
   };
 
-  // Handle cancel
   const cancelPage = () => {
     navigate("/setting/rolemanagement");
   };
 
-  // Handle add/update role
   const addNew = () => {
-    // Here, you would typically send `roleData` to an API or backend
+    // Handle add/update role
     console.log("Role data:", roleData);
     navigate("/setting/rolemanagement");
   };

@@ -3,8 +3,11 @@ import { Form, Row, Col } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./DateRangePicker.css";
-
-const DateRangePicker: React.FC = () => {
+interface DateRangePickerProps {
+  onChange: (range: [Date | null, Date | null]) => void;
+  // other props if necessary
+}
+const DateRangePicker: React.FC<DateRangePickerProps> = ({ onChange }) => {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [isStartDatePickerOpen, setStartDatePickerOpen] = useState(false);
@@ -13,7 +16,6 @@ const DateRangePicker: React.FC = () => {
   return (
     <Form>
       <Row className="align-items-center">
-        {/* Start Date Picker */}
         <Col xs="auto">
           <div className="input-wrapper">
             <span

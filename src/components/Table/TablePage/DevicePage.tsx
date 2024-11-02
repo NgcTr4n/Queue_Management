@@ -12,6 +12,7 @@ type TableRow = {
   connection: string;
   services: string;
 };
+
 type DevicePageProps = {
   devices: TableRow[];
 };
@@ -30,162 +31,55 @@ const DevicePage: React.FC<DevicePageProps> = ({ devices }) => {
     { label: "", key: "update" },
   ];
 
-  const allData: TableRow[] = [
-    {
-      deviceCode: "KIO_01",
-      deviceName: "Kiosk",
-      ipAddress: "192.168.1.10",
-      status: "Hoạt động",
-      connection: "Kết nối",
-      services: "Khám tim mạch, Khám mắt...",
-    },
-    {
-      deviceCode: "KIO_02",
-      deviceName: "Kiosk",
-      ipAddress: "192.168.1.11",
-      status: "Ngưng hoạt động",
-      connection: "Mất kết nối",
-      services: "Khám sức khỏe, Khám mắt...",
-    },
-    {
-      deviceCode: "KIO_03",
-      deviceName: "Kiosk",
-      ipAddress: "192.168.1.12",
-      status: "Hoạt động",
-      connection: "Kết nối",
-      services: "Khám tim mạch, Khám mắt...",
-    },
-    {
-      deviceCode: "KIO_04",
-      deviceName: "Kiosk",
-      ipAddress: "192.168.1.13",
-      status: "Hoạt động",
-      connection: "Kết nối",
-      services: "Khám sức khỏe, Khám mắt...",
-    },
-    {
-      deviceCode: "KIO_05",
-      deviceName: "Kiosk",
-      ipAddress: "192.168.1.14",
-      status: "Ngưng hoạt động",
-      connection: "Mất kết nối",
-      services: "Khám tim mạch, Khám mắt...",
-    },
-    {
-      deviceCode: "KIO_06",
-      deviceName: "Kiosk",
-      ipAddress: "192.168.1.15",
-      status: "Hoạt động",
-      connection: "Kết nối",
-      services: "Khám tổng quát, Khám tai mũi họng...",
-    },
-    {
-      deviceCode: "KIO_07",
-      deviceName: "Kiosk",
-      ipAddress: "192.168.1.16",
-      status: "Ngưng hoạt động",
-      connection: "Mất kết nối",
-      services: "Khám sức khỏe, Khám nội tiết...",
-    },
-    {
-      deviceCode: "KIO_08",
-      deviceName: "Kiosk",
-      ipAddress: "192.168.1.17",
-      status: "Hoạt động",
-      connection: "Kết nối",
-      services: "Khám tim mạch, Khám da liễu...",
-    },
-    {
-      deviceCode: "KIO_09",
-      deviceName: "Kiosk",
-      ipAddress: "192.168.1.18",
-      status: "Ngưng hoạt động",
-      connection: "Mất kết nối",
-      services: "Khám sức khỏe, Khám mắt...",
-    },
-    {
-      deviceCode: "KIO_10",
-      deviceName: "Kiosk",
-      ipAddress: "192.168.1.19",
-      status: "Hoạt động",
-      connection: "Kết nối",
-      services: "Khám tim mạch, Khám tâm lý...",
-    },
-    {
-      deviceCode: "KIO_11",
-      deviceName: "Kiosk",
-      ipAddress: "192.168.1.20",
-      status: "Ngưng hoạt động",
-      connection: "Mất kết nối",
-      services: "Khám nội tiết, Khám phụ khoa...",
-    },
-    {
-      deviceCode: "KIO_12",
-      deviceName: "Kiosk",
-      ipAddress: "192.168.1.21",
-      status: "Hoạt động",
-      connection: "Kết nối",
-      services: "Khám tổng quát, Khám mắt...",
-    },
-    {
-      deviceCode: "KIO_13",
-      deviceName: "Kiosk",
-      ipAddress: "192.168.1.22",
-      status: "Ngưng hoạt động",
-      connection: "Mất kết nối",
-      services: "Khám tim mạch, Khám thần kinh...",
-    },
-    {
-      deviceCode: "KIO_14",
-      deviceName: "Kiosk",
-      ipAddress: "192.168.1.23",
-      status: "Hoạt động",
-      connection: "Kết nối",
-      services: "Khám sức khỏe, Khám mắt...",
-    },
-    {
-      deviceCode: "KIO_15",
-      deviceName: "Kiosk",
-      ipAddress: "192.168.1.24",
-      status: "Ngưng hoạt động",
-      connection: "Mất kết nối",
-      services: "Khám tim mạch, Khám tiêu hóa...",
-    },
-  ];
-
-  const itemsPerPage = 8;
+  const itemsPerPage = 8; // Define how many items to show per page
   const [currentPage, setCurrentPage] = useState(1);
-  const [data, setData] = useState<TableRow[]>([]);
+  const [paginatedDevices, setPaginatedDevices] = useState<TableRow[]>([]);
 
   useEffect(() => {
+    // Update the paginated devices whenever the devices prop or currentPage changes
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    setData(allData.slice(startIndex, endIndex));
-  }, [currentPage]);
+    setPaginatedDevices(devices.slice(startIndex, endIndex));
+  }, [devices, currentPage]); // Dependency array includes devices
 
-  const totalPages = Math.ceil(allData.length / itemsPerPage);
+  const totalPages = Math.ceil(devices.length / itemsPerPage);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
+
   const handleDetailClick = (deviceCode: string) => {
     navigate(`/device/${deviceCode}`);
   };
+
   const handleUpdateClick = (deviceCode: string) => {
     navigate(`/device/${deviceCode}/update`);
   };
-  const tableData = devices.map((row) => ({
+
+  const tableData = paginatedDevices.map((row) => ({
     ...row,
     detail: (
       <div>
-        <a href="" onClick={() => handleDetailClick(row.deviceCode)}>
+        <a
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            handleDetailClick(row.deviceCode);
+          }}
+        >
           Chi tiết
         </a>
       </div>
     ),
     update: (
       <div>
-        <a href="" onClick={() => handleUpdateClick(row.deviceCode)}>
+        <a
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            handleUpdateClick(row.deviceCode);
+          }}
+        >
           Cập nhật
         </a>
       </div>

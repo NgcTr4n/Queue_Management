@@ -1,19 +1,42 @@
-import React from "react";
+import React, { useState } from "react";
 import Layout from "../../layout/Layout";
 import SearchInput from "../../components/SearchInput/SearchInput";
 import ButtonAdd from "../../components/Button/ButtonAdd/ButtonAdd";
 import DateRangePicker from "../../components/DateRangePicker/DateRangePicker";
 import NumberPage from "../../components/Table/TablePage/NumberPage";
 import RolePage from "../../components/Table/TablePage/RolePage";
-
+const sampleRole = [
+  {
+    roleName: "Kế toán",
+    userCount: 6,
+    roleDesscribe: "Thực hiện nhiệm vụ về thống kê số liệu và tổng hợp số liệu",
+  },
+  {
+    roleName: "Bác sĩ",
+    userCount: 6,
+    roleDesscribe: "Thực hiện nhiệm vụ về thống kê số liệu và tổng hợp số liệu",
+  },
+  {
+    roleName: "Lễ tân",
+    userCount: 6,
+    roleDesscribe: "Thực hiện nhiệm vụ về thống kê số liệu và tổng hợp số liệu",
+  },
+];
 const RoleManagment = () => {
-  const handleSelect = (value: string) => {
-    console.log("Selected value:", value);
-  };
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleSearch = (value: string) => {
+    setSearchTerm(value);
+
     console.log("Search input:", value);
   };
+  const filteredRole = sampleRole.filter((role) => {
+    const matchesSearchTerm = role.roleName
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+
+    return matchesSearchTerm;
+  });
 
   return (
     <Layout>
@@ -48,7 +71,7 @@ const RoleManagment = () => {
             <div className="row" style={{ marginTop: "16px" }}>
               <div className="col">
                 <div className="device-list">
-                  <RolePage />
+                  <RolePage role={filteredRole} />
                 </div>
               </div>
               <div className="col-1" style={{ marginTop: "15px" }}>

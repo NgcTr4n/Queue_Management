@@ -13,8 +13,11 @@ type TableRow = {
   statusLevel: string;
   source: string;
 };
+type LevelPageProps = {
+  level: TableRow[];
+};
 
-const NumberPage: React.FC = () => {
+const NumberPage: React.FC<LevelPageProps> = ({ level }) => {
   const navigate = useNavigate();
 
   const columns = [
@@ -28,47 +31,18 @@ const NumberPage: React.FC = () => {
     { label: "", key: "action" },
   ];
 
-  const allData: TableRow[] = [
-    {
-      serialNumber: "2010001",
-      customerName: "Lê Huỳnh Ái Vân",
-      serviceName: "Khám tim mạch",
-      issueTime: "14:35 - 07/11/2021",
-      expirationTime: "14:35 - 12/11/2021",
-      statusLevel: "Đang chờ",
-      source: "Kiosk",
-    },
-    {
-      serialNumber: "2010002",
-      customerName: "Huỳnh Ái Vân",
-      serviceName: "Khám sản - Phụ khoa",
-      issueTime: "14:35 - 07/11/2021",
-      expirationTime: "14:35 - 12/11/2021",
-      statusLevel: "Đã sử dụng",
-      source: "Kiosk",
-    },
-    {
-      serialNumber: "2010003",
-      customerName: "Lê Ái Vân",
-      serviceName: "Khám răng hàm mặt",
-      issueTime: "14:35 - 07/11/2021",
-      expirationTime: "14:35 - 12/11/2021",
-      statusLevel: "Đang chờ",
-      source: "Hệ thống",
-    },
-  ];
-
-  const itemsPerPage = 8;
+  const itemsPerPage = 8; // Define how many items to show per page
   const [currentPage, setCurrentPage] = useState(1);
-  const [data, setData] = useState<TableRow[]>([]);
+  const [paginatedLevel, setPaginatedLevel] = useState<TableRow[]>([]);
 
   useEffect(() => {
+    // Update the paginated devices whenever the devices prop or currentPage changes
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    setData(allData.slice(startIndex, endIndex));
-  }, [currentPage]);
+    setPaginatedLevel(level.slice(startIndex, endIndex));
+  }, [level, currentPage]); // Dependency array includes devices
 
-  const totalPages = Math.ceil(allData.length / itemsPerPage);
+  const totalPages = Math.ceil(level.length / itemsPerPage);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -77,7 +51,7 @@ const NumberPage: React.FC = () => {
   const handleDetailClick = (serialNumber: string) => {
     navigate(`/number/${serialNumber}`);
   };
-  const tableData = data.map((row) => ({
+  const tableData = paginatedLevel.map((row) => ({
     ...row,
     action: (
       <div>
