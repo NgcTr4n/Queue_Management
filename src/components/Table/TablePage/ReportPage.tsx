@@ -23,14 +23,42 @@ const ReportPage: React.FC = () => {
   const allData: TableRow[] = [
     {
       serialNumber: "2010001",
-      serviceName: "Khá tim mạch",
+      serviceName: "Khám tim mạch",
+      issueTime: "07:20 - 07/10/2021",
+      statusLevel: "Đang chờ",
+      source: "Kiosk",
+    },
+    {
+      serialNumber: "2010002",
+      serviceName: "Răng hàm mặt",
+      issueTime: "07:20 - 07/10/2021",
+      statusLevel: "Đã sử dụng",
+      source: "Hệ thống",
+    },
+    {
+      serialNumber: "2010003",
+      serviceName: "Khám sản - phụ khoa",
+      issueTime: "07:20 - 07/10/2021",
+      statusLevel: "Bỏ qua",
+      source: "Kiosk",
+    },
+    {
+      serialNumber: "2010004",
+      serviceName: "Răng hàm mặt",
+      issueTime: "07:20 - 07/10/2021",
+      statusLevel: "Đang chờ",
+      source: "Kiosk",
+    },
+    {
+      serialNumber: "2010005",
+      serviceName: "Tai mũi họng",
       issueTime: "07:20 - 07/10/2021",
       statusLevel: "Đang chờ",
       source: "Kiosk",
     },
   ];
 
-  const itemsPerPage = 8;
+  const itemsPerPage = 6;
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState<TableRow[]>([]);
 

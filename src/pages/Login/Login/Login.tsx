@@ -4,6 +4,8 @@ import loginPic from "../../../assets/login/login_pic.png";
 import "./Login.css";
 import Button from "../../../components/Button/FilledButton";
 import FilledButton from "../../../components/Button/FilledButton";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth"; // Import Firebase Auth
+
 import { useNavigate } from "react-router-dom";
 
 const Login: React.FC = () => {
@@ -11,25 +13,23 @@ const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(false);
-
-  const data = {
-    username: "name1",
-    password: "password123",
-  };
+  const [error, setError] = useState("");
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (username !== data.username || password !== data.password) {
-      setError(true);
-    } else {
-      setError(false);
+    const auth = getAuth(); // Get the Firebase Auth instance
+
+    try {
+      await signInWithEmailAndPassword(auth, username, password); // Sign in with Firebase Auth
       console.log("Đăng nhập thành công");
       navigate("/dashboard");
+    } catch (error) {
+      setError("Sai mật khẩu hoặc tên đăng nhập"); // Set error message
+      console.error("Login error:", error);
     }
   };
 

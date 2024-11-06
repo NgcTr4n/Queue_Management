@@ -5,9 +5,10 @@ import PaginationComponent from "../PaginationComponent";
 import { useNavigate } from "react-router-dom";
 
 type TableRow = {
+  id: string;
   roleName: string;
   userCount: number;
-  roleDesscribe: string;
+  roleDescribe: string;
 };
 type RolePageProps = {
   role: TableRow[];
@@ -17,11 +18,11 @@ const RolePage: React.FC<RolePageProps> = ({ role }) => {
   const columns = [
     { label: "Tên vai trò", key: "roleName" },
     { label: "Số người dùng", key: "userCount" },
-    { label: "Mô tả", key: "roleDesscribe" },
+    { label: "Mô tả", key: "roleDescribe" },
     { label: "", key: "update" },
   ];
 
-  const itemsPerPage = 8; // Define how many items to show per page
+  const itemsPerPage = 6; // Define how many items to show per page
   const [currentPage, setCurrentPage] = useState(1);
   const [paginatedRole, setPaginatedRole] = useState<TableRow[]>([]);
 
@@ -37,14 +38,14 @@ const RolePage: React.FC<RolePageProps> = ({ role }) => {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
-  const handleUpdateClick = (roleName: string) => {
-    navigate(`/setting/rolemangament/${roleName}/update`);
+  const handleUpdateClick = (id: string) => {
+    navigate(`/setting/rolemangament/${id}/update`);
   };
   const tableData = paginatedRole.map((row) => ({
     ...row,
     update: (
       <div>
-        <a href="" onClick={() => handleUpdateClick(row.roleName)}>
+        <a href="" onClick={() => handleUpdateClick(row.id)}>
           Cập nhật
         </a>
       </div>

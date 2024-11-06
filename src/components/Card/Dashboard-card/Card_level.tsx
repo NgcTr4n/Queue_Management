@@ -18,7 +18,7 @@ const card_level = [
       </svg>
     ),
     text: "Số thứ tự đã cấp",
-    number: "4.221",
+    number: "5",
     fluctuation: "up",
     fluctuation_number: "32,41%",
   },
@@ -43,7 +43,7 @@ const card_level = [
       </svg>
     ),
     text: "Số thứ tự đã sử dụng",
-    number: "3.721",
+    number: "1",
     fluctuation: "down",
     fluctuation_number: "32,41%",
   },
@@ -72,7 +72,7 @@ const card_level = [
       </svg>
     ),
     text: "Số thứ tự đang chờ",
-    number: "468",
+    number: "4",
     fluctuation: "up",
     fluctuation_number: "56,41%",
   },
@@ -97,7 +97,7 @@ const card_level = [
       </svg>
     ),
     text: "Số thứ tự đã bỏ qua",
-    number: "32",
+    number: "0",
     fluctuation: "down",
     fluctuation_number: "22,41%",
   },
@@ -108,7 +108,7 @@ const Card_level = () => {
       {card_level.map((item, index) => (
         <div key={index} className="col-md-3 ">
           <div className="card dashboard-card-level">
-            <div className="card-body" style={{marginLeft: '3px'}}>
+            <div className="card-body" style={{ marginLeft: "3px" }}>
               <div className="card-icon d-flex align-item-center justify-content-flex-start">
                 <div className="bg_general_icon">
                   <div
@@ -117,7 +117,9 @@ const Card_level = () => {
                   ></div>
                   <div className="general_icon">{item.icon}</div>
                 </div>
-                <div className="card-icon-text d-flex align-items-center">{item.text}</div>
+                <div className="card-icon-text d-flex align-items-center">
+                  {item.text}
+                </div>
               </div>
               <div className="card-content d-flex align-items-center justify-content-between">
                 <div className="card-content-text">
@@ -130,9 +132,7 @@ const Card_level = () => {
                       item.fluctuation === "up"
                         ? "rgba(255, 149, 1, 0.15)"
                         : "rgba(231, 63, 63, 0.15)",
-                    color: item.fluctuation === "up"
-                    ? "#FF9138"
-                    : "#E73F3F",
+                    color: item.fluctuation === "up" ? "#FF9138" : "#E73F3F",
                   }}
                 >
                   <div className="card-fluctuation-icon">

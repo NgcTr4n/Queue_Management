@@ -5,6 +5,7 @@ import PaginationComponent from "../PaginationComponent";
 import { useNavigate } from "react-router-dom";
 
 type TableRow = {
+  id: string;
   serviceCode: string;
   serviceName: string;
   serviceDescribe: string;
@@ -24,7 +25,7 @@ const ServicePage: React.FC<ServicePageProps> = ({ services }) => {
     { label: "", key: "update" },
   ];
 
-  const itemsPerPage = 8; // Define how many items to show per page
+  const itemsPerPage = 6; // Define how many items to show per page
   const [currentPage, setCurrentPage] = useState(1);
   const [paginatedServices, setPaginatedDevices] = useState<TableRow[]>([]);
 
@@ -40,24 +41,24 @@ const ServicePage: React.FC<ServicePageProps> = ({ services }) => {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
-  const handleDetailClick = (serviceCode: string) => {
-    navigate(`/service/${serviceCode}`);
+  const handleDetailClick = (id: string) => {
+    navigate(`/service/${id}`);
   };
-  const handleUpdateClick = (serviceCode: string) => {
-    navigate(`/service/${serviceCode}/update`);
+  const handleUpdateClick = (id: string) => {
+    navigate(`/service/${id}/update`);
   };
   const tableData = paginatedServices.map((row) => ({
     ...row,
     detail: (
       <div>
-        <a href="" onClick={() => handleDetailClick(row.serviceCode)}>
+        <a href="" onClick={() => handleDetailClick(row.id)}>
           Chi tiết
         </a>
       </div>
     ),
     update: (
       <div>
-        <a href="" onClick={() => handleUpdateClick(row.serviceCode)}>
+        <a href="" onClick={() => handleUpdateClick(row.id)}>
           Cập nhật
         </a>
       </div>

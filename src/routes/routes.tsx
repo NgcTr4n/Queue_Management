@@ -28,6 +28,7 @@ export const router = createBrowserRouter([
     path: "/",
     element: <Login />,
   },
+
   {
     path: "/forgotpassword",
     element: <ForgotPassword />,
@@ -45,11 +46,11 @@ export const router = createBrowserRouter([
     element: <DeviceAdd />,
   },
   {
-    path: "/device/:deviceCode",
+    path: "/device/:id",
     element: <DeviceDetailPage />,
   },
   {
-    path: "/device/:deviceCode/update",
+    path: "/device/:id/update",
     element: <DeviceUpdate />,
   },
   {
@@ -77,7 +78,7 @@ export const router = createBrowserRouter([
     element: <RoleManagement />,
   },
   {
-    path: "/setting/rolemangament/:roleName/update",
+    path: "/setting/rolemangament/:id/update",
     element: <RoleUpdate />,
   },
   {
@@ -93,7 +94,7 @@ export const router = createBrowserRouter([
     element: <AccountManagementAdd />,
   },
   {
-    path: "/setting/accountmanagement/:accountName/update",
+    path: "/setting/accountmanagement/:id/update",
     element: <AccountManagementUpdate />,
   },
   {
@@ -105,11 +106,11 @@ export const router = createBrowserRouter([
     element: <ServiceAdd />,
   },
   {
-    path: "/service/:serviceCode/update",
+    path: "/service/:id/update",
     element: <ServiceUpdate />,
   },
   {
-    path: "/service/:serviceCode",
+    path: "/service/:id",
     element: <ServiceDetail />,
   },
   {

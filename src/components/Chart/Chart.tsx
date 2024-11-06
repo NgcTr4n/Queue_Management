@@ -27,8 +27,8 @@ ChartJS.register(
 );
 
 // Custom plugin to draw the title
-const titlePlugin: Plugin<'line'> = {
-  id: 'customTitle',
+const titlePlugin: Plugin<"line"> = {
+  id: "customTitle",
   beforeDraw: (chart) => {
     const ctx = chart.ctx;
     const chartArea = chart.chartArea;
@@ -36,14 +36,14 @@ const titlePlugin: Plugin<'line'> = {
 
     // Set title styling
     ctx.save();
-    ctx.font = "20px bold Arial"; // Adjust font style and size
+    ctx.font = "12px bold Arial"; // Adjust font style and size
     ctx.fillStyle = "#000"; // Title color
-    ctx.textAlign = "center"; // Center alignment
-    ctx.textBaseline = "middle"; // Vertical alignment
+    ctx.textAlign = "left"; // Center alignment
+    ctx.textBaseline = "bottom"; // Vertical alignment
 
     // Calculate title position
-    const x = (chartArea.left + chartArea.right) / 2;
-    const y = (chartArea.top + chartArea.bottom) / 2;
+    const x = chartArea.left;
+    const y = chartArea.bottom;
 
     // Draw the title
     ctx.fillText(title, x, y);
@@ -68,8 +68,8 @@ const Chart: React.FC = () => {
           const chart = context.chart;
           const { ctx } = chart;
           const gradient = ctx.createLinearGradient(0, 0, 0, chart.height);
-          gradient.addColorStop(0, 'rgba(206,221,255,1)');
-          gradient.addColorStop(1, 'rgba(255,255,255,1)');
+          gradient.addColorStop(0, "rgba(206,221,255,1)");
+          gradient.addColorStop(1, "rgba(255,255,255,1)");
           return gradient;
         }, // Gradient fill
         borderColor: "#5185F7", // Line color
@@ -79,13 +79,13 @@ const Chart: React.FC = () => {
         pointHoverRadius: 10, // Dots appear on hover
         pointBackgroundColor: "#5185F7", // Highlight on hover
         pointBorderColor: "#F6F6F6",
-        pointHoverBorderColor: '#FFF', // Màu viền của điểm khi hover
-        pointHoverBorderWidth: 4 // Độ dày viền của điểm khi hover
+        pointHoverBorderColor: "#FFF", // Màu viền của điểm khi hover
+        pointHoverBorderWidth: 4, // Độ dày viền của điểm khi hover
       },
     ],
   };
 
-  const options: ChartOptions<'line'> = {
+  const options: ChartOptions<"line"> = {
     responsive: true,
     scales: {
       y: {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Layout from "../../layout/Layout";
 import DateRangePicker from "../../components/DateRangePicker/DateRangePicker";
@@ -8,17 +8,11 @@ import ButtonAdd from "../../components/Button/ButtonAdd/ButtonAdd";
 import ServicePage from "../../components/Table/TablePage/ServicePage";
 import ServiceDetailPage from "../../components/Table/TablePage/ServiceDetailPage";
 import ServiceDetailButton from "../../components/Button/ButtonAdd/ServiceDetailButton";
-type DeviceDetailProps = {
-  serviceCode: string;
-  serviceName: string;
-  serviceDescribe: string;
-  status: string;
-  describe: string;
-  autoIncreaseN1: string;
-  autoIncreaseN2: string;
-  prefix: string;
-  reset: string;
-};
+import { useAppSelector } from "../../hooks/hooks";
+import { fetchService } from "../../features/serviceSlice";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../app/store";
+
 const optionActive = [
   { label: "Tất cả", value: "tatca" },
   { label: "Đã hoàn thành", value: "dahoanthanh" },
@@ -27,7 +21,53 @@ const optionActive = [
 ];
 
 const ServiceDetail: React.FC = () => {
-  const { serviceCode } = useParams<{ serviceCode: string }>();
+  const dispatch = useDispatch<AppDispatch>();
+  const { service, loading, error } = useAppSelector((state) => state.service);
+  const { id } = useParams<{ id: string }>();
+
+  const [currentCount, setCurrentCount] = useState<number | null>(null);
+  const [status, setStatus] = useState<string>(optionActive[0].value);
+  const [serialNumbers, setSerialNumbers] = useState<string[]>([]);
+
+  useEffect(() => {
+    dispatch(fetchService());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (service && Array.isArray(service)) {
+      const allService = service.find((item) => item.id === id);
+      if (allService) {
+        // Check if rangeStart exists and set currentCount
+        if (allService.numberRule?.rangeStart) {
+          setCurrentCount(parseInt(allService.numberRule.rangeStart, 10));
+        }
+        // Generate serial numbers based on prefix and range
+        generateSerialNumbers(allService);
+      }
+    }
+  }, [service, id]);
+
+  const generateSerialNumbers = (allService: any) => {
+    const serviceCode = allService.serviceCode;
+    const prefix = allService.numberRule?.prefix;
+    const rangeStart = parseInt(allService.numberRule?.rangeStart, 10) || 0;
+    const rangeEnd = parseInt(allService.numberRule?.rangeEnd, 10) || 0;
+
+    const numbers: string[] = [];
+
+    if (prefix) {
+      numbers.push(`${serviceCode}${prefix}`);
+    }
+
+    // Generate serial numbers based on the automatic range
+    for (let i = rangeStart; i <= rangeEnd; i++) {
+      const formattedCount = String(i).padStart(4, "0"); // Format the number to be 4 digits
+      numbers.push(`${serviceCode}${formattedCount}`); // Combine serviceCode with formatted number
+    }
+
+    setSerialNumbers(numbers);
+  };
+
   const handleSelect = (value: string) => {
     console.log("Selected value:", value);
   };
@@ -36,36 +76,14 @@ const ServiceDetail: React.FC = () => {
     console.log("Search input:", value);
   };
 
-  const allData: DeviceDetailProps[] = [
-    {
-      serviceCode: "KIO_01",
-      serviceName: "Khám tim mạch",
-      serviceDescribe: "Hoạt động",
-      status: "Hoạt động",
-      describe: "Chuyên các bệnh lý về tim",
-      autoIncreaseN1: "0001",
-      autoIncreaseN2: "9999",
-      prefix: "0001",
-      reset: "reset",
-    },
-    {
-      serviceCode: "KIO_02",
-      serviceName: "Khám tim mạch",
-      serviceDescribe: "Hoạt động",
-      status: "Hoạt động",
-      describe: "Chuyên các bệnh lý về tim",
-      autoIncreaseN1: "0001",
-      autoIncreaseN2: "9999",
-      prefix: "0001",
-      reset: "reset",
-    },
-  ];
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
-  const device = allData.find((item) => item.serviceCode === serviceCode);
+  const allService = Array.isArray(service)
+    ? service.find((item) => item.id === id)
+    : null;
 
-  if (!device) {
-    return <div>Device not found</div>;
-  }
+  if (!allService) return <div>Service not found</div>;
 
   return (
     <Layout>
@@ -88,7 +106,7 @@ const ServiceDetail: React.FC = () => {
                           <strong>Mã dịch vụ:</strong>
                         </div>
                         <div className="col" style={{ color: "#535261" }}>
-                          {device.serviceCode}
+                          {allService?.serviceCode}
                         </div>
                       </div>
                     </p>
@@ -98,7 +116,7 @@ const ServiceDetail: React.FC = () => {
                           <strong>Tên dịch vụ:</strong>
                         </div>
                         <div className="col" style={{ color: "#535261" }}>
-                          {device.serviceName}
+                          {allService?.serviceName}
                         </div>
                       </div>
                     </p>
@@ -108,7 +126,7 @@ const ServiceDetail: React.FC = () => {
                           <strong>Mô tả:</strong>{" "}
                         </div>
                         <div className="col" style={{ color: "#535261" }}>
-                          {device.describe}
+                          {allService?.serviceDescribe}
                         </div>
                       </div>
                     </p>
@@ -121,7 +139,8 @@ const ServiceDetail: React.FC = () => {
                           <strong>Tăng tự động:</strong>{" "}
                         </div>
                         <div className="col" style={{ color: "#535261" }}>
-                          {device.autoIncreaseN1} đến {device.autoIncreaseN2}
+                          {allService.numberRule?.rangeStart} đến{" "}
+                          {allService.numberRule?.rangeEnd}
                         </div>
                       </div>
                     </p>
@@ -131,7 +150,7 @@ const ServiceDetail: React.FC = () => {
                           <strong>Prefix:</strong>{" "}
                         </div>
                         <div className="col" style={{ color: "#535261" }}>
-                          {device.prefix}
+                          {allService.numberRule?.prefix}
                         </div>
                       </div>
                     </p>
@@ -141,7 +160,7 @@ const ServiceDetail: React.FC = () => {
                           <strong>Reset mỗi ngày</strong> <br />
                           <span style={{ color: "#535261" }}>
                             {" "}
-                            Ví dụ: 201-2001
+                            Ví dụ: 201 - 2001
                           </span>
                         </div>
                       </div>
@@ -179,7 +198,10 @@ const ServiceDetail: React.FC = () => {
                       <div className="row" style={{ marginTop: "16px" }}>
                         <div className="col">
                           <div className="device-list">
-                            <ServiceDetailPage />
+                            <ServiceDetailPage
+                              serialNumbers={serialNumbers} // Pass the list of serial numbers
+                              serviceStatus={status}
+                            />
                           </div>
                         </div>
                       </div>
@@ -187,7 +209,7 @@ const ServiceDetail: React.FC = () => {
                   </div>
                   <div className="col-md-1">
                     <div className="col-1" style={{ marginTop: "15px" }}>
-                      <ServiceDetailButton />
+                      <ServiceDetailButton id={allService?.id} />
                     </div>
                   </div>
                 </div>

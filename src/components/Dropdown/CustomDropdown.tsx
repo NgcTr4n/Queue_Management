@@ -14,16 +14,20 @@ interface CustomDropdownProps {
 }
 
 const CustomDropdown: React.FC<CustomDropdownProps> = ({
-  options,
+  options = [],
   onSelect,
   selectedValue,
   style,
 }) => {
   const [selected, setSelected] = useState<string>(
-    selectedValue || options[0].label
+    selectedValue ||
+      (options.length > 0 ? options[0].label : "Select an option")
   );
   const [isOpen, setIsOpen] = useState(false);
 
+  if (options.length === 0) {
+    return <div>No options available</div>;
+  }
   const handleSelect = (option: Option) => {
     setSelected(option.label);
     onSelect(option.value);

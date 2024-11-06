@@ -1,14 +1,17 @@
 import React from "react";
 import "./ButtonAdd.css";
 import { useNavigate } from "react-router-dom";
+interface ServiceDetailButtonProps {
+  id: string; // Expecting an id prop
+}
 
-const ServiceDetailButton = () => {
+const ServiceDetailButton: React.FC<ServiceDetailButtonProps> = ({ id }) => {
   const navigate = useNavigate();
   const handleNavigate = () => {
     navigate("/service");
   };
   const handleNavigate1 = () => {
-    navigate("/service/:serviceCode/update");
+    navigate(`/service/${id}/update`);
   };
   return (
     <div className="btn-add">

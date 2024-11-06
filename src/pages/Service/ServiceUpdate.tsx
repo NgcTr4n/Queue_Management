@@ -6,48 +6,63 @@ import ButtonFormAdd from "../../components/Button/ButtonForm/ButtonFormAdd/Butt
 import ButtonFormCancel from "../../components/Button/ButtonForm/ButtonFormCancel/ButtonFormCancel";
 import NumberRuleForm from "../../components/Number-rule/Number-rule";
 import { useNavigate, useParams } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { fetchService, updateData } from "../../features/serviceSlice";
+
+type NumberRule = {
+  autoIncrement: boolean;
+  prefix: string;
+  suffix: string;
+  resetDaily: boolean;
+  rangeStart: string;
+  rangeEnd: string;
+};
 
 type ServiceData = {
   serviceCode: string;
   serviceName: string;
   serviceDescribe: string;
-  autoIncreaseN1: string;
-  autoIncreaseN2: string;
-  prefix: string;
-  reset: string;
+  status: string;
+  numberRule: NumberRule;
 };
 
 const ServiceUpdate = () => {
-  const { serviceCode } = useParams<{ serviceCode: string }>(); // Get service code from URL
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
+  const { service, loading, error } = useAppSelector((state) => state.service);
   const [serviceData, setServiceData] = useState<ServiceData>({
     serviceCode: "",
     serviceName: "",
     serviceDescribe: "",
-    autoIncreaseN1: "",
-    autoIncreaseN2: "",
-    prefix: "",
-    reset: "",
+    status: "",
+    numberRule: {
+      autoIncrement: false,
+      prefix: "",
+      suffix: "",
+      resetDaily: false,
+      rangeStart: "0001",
+      rangeEnd: "9999",
+    },
   });
 
-  // Simulate fetching existing data
+  // Fetch data on mount if not available
   useEffect(() => {
-    // Replace with actual API call to fetch data by `serviceCode`
-    const fetchServiceData = async () => {
-      const mockData = {
-        serviceCode: serviceCode || "",
-        serviceName: "Kiosk",
-        serviceDescribe: "This is a description",
-        autoIncreaseN1: "001",
-        autoIncreaseN2: "100",
-        prefix: "PR",
-        reset: "Monthly",
-      };
-      setServiceData(mockData);
-    };
-    fetchServiceData();
-  }, [serviceCode]);
+    if (!service || service.length === 0) {
+      dispatch(fetchService()); // Fetch all services data if not loaded
+    }
+  }, [dispatch, service]);
+
+  // Set initial data when `id` and `service` are available
+  useEffect(() => {
+    if (id && Array.isArray(service) && service.length > 0) {
+      const foundService = service.find((s) => s.id === id);
+      if (foundService) {
+        setServiceData(foundService);
+      }
+    }
+  }, [service, id]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -59,15 +74,47 @@ const ServiceUpdate = () => {
     }));
   };
 
+  const handleNumberRuleChange = (updatedNumberRule: NumberRule) => {
+    setServiceData((prevData) => ({
+      ...prevData,
+      numberRule: updatedNumberRule,
+    }));
+  };
+
   const cancelPage = () => {
     navigate("/service");
   };
 
-  const updateService = () => {
-    // Replace with actual API call to update service
-    console.log("Updated service data:", serviceData);
-    navigate("/service");
+  const updateServiceData = async () => {
+    if (id) {
+      if (!serviceData.serviceName || !serviceData.serviceDescribe) {
+        alert("Please fill in all required fields.");
+        return;
+      }
+
+      try {
+        await dispatch(
+          updateData({
+            ...serviceData,
+            id,
+            status: "Hoạt động",
+          })
+        ).unwrap();
+        navigate("/service");
+      } catch (err) {
+        console.error("Failed to update service:", err);
+        alert("Failed to update service. Please try again later.");
+      }
+    }
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <Layout>
@@ -136,7 +183,10 @@ const ServiceUpdate = () => {
                     Quy tắc cấp số
                   </h5>
                   <div className="col-md-6 device-add-form">
-                    <NumberRuleForm />
+                    <NumberRuleForm
+                      onChange={handleNumberRuleChange}
+                      numberRule={serviceData.numberRule}
+                    />
                   </div>
                 </div>
                 <p>
@@ -150,7 +200,10 @@ const ServiceUpdate = () => {
             <div className="btn-form-footer-cancel p-2" onClick={cancelPage}>
               <ButtonFormCancel btn_name="Hủy bỏ" />
             </div>
-            <div className="btn-form-footer-add p-2" onClick={updateService}>
+            <div
+              className="btn-form-footer-add p-2"
+              onClick={updateServiceData}
+            >
               <ButtonFormAdd btn_name="Cập nhật" />
             </div>
           </div>
@@ -161,3 +214,6 @@ const ServiceUpdate = () => {
 };
 
 export default ServiceUpdate;
+function fetchServices(): any {
+  throw new Error("Function not implemented.");
+}

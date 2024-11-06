@@ -91,11 +91,11 @@ const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
             onChange={() => handleCheck(option)}
           />
           <label
-            style={{ color: "#535261", marginLeft: "8px" }}
+            style={{ color: "#535261", marginLeft: "8px", width: "100%" }}
             className="form-check-label"
             htmlFor={`${title}-${option}`}
           >
-            Chức năng {option}
+            {option}
           </label>
         </div>
       ))}

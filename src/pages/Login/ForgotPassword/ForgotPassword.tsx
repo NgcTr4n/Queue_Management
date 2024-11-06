@@ -1,26 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../../../assets/logo/Logo_alta.png";
 import loginpassPic from "../../../assets/login/login_pass.png";
 import "./ForgotPassword.css";
 import FilledButton from "../../../components/Button/FilledButton";
 import BorderButton from "../../../components/Button/BorderButton";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { auth } from "../../../services/firebase"; // Import your Firebase config
+import { getAuth, confirmPasswordReset } from "firebase/auth";
 
 const ForgotPassword: React.FC = () => {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
   const [rePassword, setRePassword] = useState("");
-
-  const [error, setError] = useState(false);
-  const [passwordError, setPasswordError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showRePassword, setShowRePassword] = useState(false);
+  const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+  const { oobCode } = useParams<{ oobCode?: string }>();
   const navigate = useNavigate();
+  const auth = getAuth();
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+
   const toggleRePasswordVisibility = () => {
     setShowRePassword(!showRePassword);
   };
@@ -30,25 +34,34 @@ const ForgotPassword: React.FC = () => {
     return emailRegex.test(email);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  useEffect(() => {
+    console.log("Current URL:", window.location.href);
+    console.log("oobCode:", oobCode);
+  }, [oobCode]);
 
-    if (!isFormSubmitted) {
-      if (!validateEmail(email)) {
-        setError(true);
-        return;
-      } else {
-        setError(false);
-        setIsFormSubmitted(true);
-      }
-    } else {
-      if (password !== rePassword || password === "") {
-        setPasswordError(true);
-        return;
-      } else {
-        setPasswordError(false);
-        navigate("/");
-      }
+  const handlePasswordReset = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!oobCode) {
+      setError("Mã xác thực không hợp lệ.");
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      setError("Mật khẩu phải ít nhất 6 ký tự.");
+      return;
+    }
+
+    if (newPassword !== rePassword) {
+      setError("Mật khẩu và Nhập lại mật khẩu không khớp.");
+      return;
+    }
+
+    try {
+      await confirmPasswordReset(auth, oobCode, newPassword);
+      setSuccessMessage("Mật khẩu đã được đặt lại thành công!");
+      navigate("/login"); // Redirect to login page after success
+    } catch (error) {
+      setError("Có lỗi xảy ra. Vui lòng thử lại.");
     }
   };
 
@@ -60,7 +73,18 @@ const ForgotPassword: React.FC = () => {
         </div>
         <div className="login-form">
           {!isFormSubmitted ? (
-            <form className="login-form" onSubmit={handleSubmit}>
+            <form
+              className="login-form"
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (validateEmail(email)) {
+                  setIsFormSubmitted(true);
+                  setError(""); // Clear error
+                } else {
+                  setError("Email không hợp lệ.");
+                }
+              }}
+            >
               <div className="login-form-username">
                 <h4>Đặt lại mật khẩu</h4>
                 <label className="label">
@@ -130,7 +154,7 @@ const ForgotPassword: React.FC = () => {
               </div>
             </form>
           ) : (
-            <form className="login-form" onSubmit={handleSubmit}>
+            <form className="login-form" onSubmit={handlePasswordReset}>
               <div className="login-form-username">
                 <h4 className="display-4">Đặt lại mật khẩu mới</h4>
                 <div className="login-form-password">
@@ -143,8 +167,8 @@ const ForgotPassword: React.FC = () => {
                       type={showPassword ? "text" : "password"}
                       placeholder="Mật khẩu"
                       style={{ paddingRight: "40px" }}
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
                     />
                     <button
                       type="button"
@@ -354,7 +378,7 @@ const ForgotPassword: React.FC = () => {
                       )}
                     </button>
                   </div>
-                  {passwordError && (
+                  {/* {passwordError && (
                     <div className="error-message">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -399,7 +423,7 @@ const ForgotPassword: React.FC = () => {
                       </svg>
                       <span> Mật khẩu không khớp</span>
                     </div>
-                  )}
+                  )} */}
                 </div>
               </div>
               <div className="btn-repass">

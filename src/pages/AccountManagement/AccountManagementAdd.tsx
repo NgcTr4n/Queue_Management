@@ -1,55 +1,136 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../../layout/Layout";
 import CustomDropdown from "../../components/Dropdown/CustomDropdown";
 import ButtonFormAdd from "../../components/Button/ButtonForm/ButtonFormAdd/ButtonFormAdd";
 import ButtonFormCancel from "../../components/Button/ButtonForm/ButtonFormCancel/ButtonFormCancel";
 import { useNavigate } from "react-router-dom";
-const optionsRole = [
-  { label: "Kiosk", value: "kiosk" },
-  { label: "Display counter", value: "displaycounter" },
-];
+import { useAppDispatch } from "../../hooks/hooks";
+import { uploadData } from "../../features/accountSlice";
+import { fetchRole } from "../../features/roleSlice";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../services/firebase";
+
+// const optionsRole = [
+//   { label: "Kế toán", value: "Kế toán" },
+//   { label: "Bác sĩ", value: "Bác sĩ" },
+//   {
+//     label: "Lễ tân",
+//     value: "Lễ tân",
+//   },
+//   { label: "Quản lý", value: "Quản lý" },
+//   { label: "Admin", value: "Admin" },
+// ];
+interface RoleOption {
+  label: string;
+  value: string;
+}
+
 const optionsStatus = [
-  { label: "Hoạt đông", value: "hoatdong" },
-  { label: "Ngưng hoạt động", value: "ngưnghoatdong" },
+  { label: "Hoạt động", value: "Hoạt động" },
+  { label: "Ngưng hoạt động", value: "Ngưng hoạt động" },
 ];
+
 const AccountManagementAdd = () => {
-  const handleSelect = (value: string) => {
-    console.log("Selected value:", value);
-  };
-  const [password, setPassword] = useState("");
-  const [rePassword, setRePassword] = useState("");
-  const [passwordError, setPasswordError] = useState(false);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const [accountName, setAccountName] = useState<string>("");
+  const [fullName, setFullName] = useState<string>("");
+  const [phoneNumber, setPhoneNumber] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [rePassword, setRePassword] = useState<string>("");
+  const [status, setStatus] = useState<string>("");
+  const [roleName, setRoleName] = useState<string>("");
+  const [optionsRole, setOptionsRole] = useState<RoleOption[]>([]);
   const [showPassword, setShowPassword] = useState(false);
   const [showRePassword, setShowRePassword] = useState(false);
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-  const toggleRePasswordVisibility = () => {
-    setShowRePassword(!showRePassword);
-  };
-  const navigate = useNavigate();
+
+  useEffect(() => {
+    const loadRoles = async () => {
+      try {
+        const roles = await dispatch(fetchRole()).unwrap();
+        const roleOptions: RoleOption[] = roles.map((role) => ({
+          label: role.roleName,
+          value: role.roleName,
+        }));
+        setOptionsRole(roleOptions);
+      } catch (error) {
+        console.error("Failed to fetch roles:", error);
+      }
+    };
+
+    loadRoles();
+  }, [dispatch]);
+
   const cancelPage = () => {
     navigate("/setting/accountmanagement");
   };
-  const addNew = () => {
-    navigate("/setting/accountmanagement");
-    console.log("Add successfully");
+
+  const handleSelectRole = (label: string) => {
+    setRoleName(label);
   };
+
+  const handleSelectStatus = (label: string) => {
+    setStatus(label);
+  };
+
+  const handleUpload = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (password !== rePassword) {
+      alert("Mật khẩu không khớp!");
+      return;
+    }
+    try {
+      // Create a user with email and password
+      await createUserWithEmailAndPassword(auth, email, password);
+
+      const dataToUpload = {
+        accountName,
+        fullName,
+        phoneNumber,
+        email,
+        roleName,
+        password,
+        rePassword,
+        status,
+      };
+
+      console.log("Uploading data:", dataToUpload);
+      dispatch(uploadData(dataToUpload));
+
+      // Reset input values after upload
+      setAccountName("");
+      setFullName("");
+      setPhoneNumber("");
+      setEmail("");
+      setPassword("");
+      setRePassword("");
+      setRoleName("");
+      setStatus("");
+
+      navigate("/setting/accountmanagement");
+    } catch (error) {
+      console.error("Error creating account:", error);
+      alert("Đăng ký thất bại: ");
+    }
+  };
+
   return (
     <Layout>
       <div className="container">
         <div className="row">
           <h3 className="display-3" style={{ color: "#FF9138" }}>
             Quản lý tài khoản
-          </h3>{" "}
+          </h3>
           <div className="row">
-            <div className="col-md-12  device-add-main">
+            <div className="col-md-12 device-add-main">
               <div className="row">
                 <h5 className="display-5" style={{ color: "#FF7506" }}>
                   Thông tin tài khoản
                 </h5>
                 <div className="col-md-6 device-add-form">
-                  <form action="">
+                  <form>
                     <div className="form-group">
                       <label className="label" htmlFor="hoten">
                         Họ tên: <span style={{ color: "#FF4747" }}>*</span>
@@ -58,8 +139,9 @@ const AccountManagementAdd = () => {
                         type="text"
                         className="form-control"
                         id="hoten"
-                        name="hoten"
                         placeholder="Nhập họ tên"
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
                       />
                     </div>
                     <div className="form-group">
@@ -71,8 +153,9 @@ const AccountManagementAdd = () => {
                         type="text"
                         className="form-control"
                         id="sodienthoai"
-                        name="sodienthoai"
                         placeholder="Nhập số điện thoại"
+                        value={phoneNumber}
+                        onChange={(e) => setPhoneNumber(e.target.value)}
                       />
                     </div>
                     <div className="form-group">
@@ -80,11 +163,12 @@ const AccountManagementAdd = () => {
                         Email: <span style={{ color: "#FF4747" }}>*</span>
                       </label>
                       <input
-                        type="text"
+                        type="email"
                         className="form-control"
                         id="email"
-                        name="email"
                         placeholder="Nhập email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                       />
                     </div>
                     <div className="form-group">
@@ -93,26 +177,26 @@ const AccountManagementAdd = () => {
                       </label>
                       <CustomDropdown
                         options={optionsRole}
-                        onSelect={handleSelect}
+                        onSelect={handleSelectRole}
                         style={{ width: "100%", height: "38px" }}
                       />
                     </div>
                   </form>
                 </div>
                 <div className="col-md-6 device-add-form">
-                  <form action="">
+                  <form>
                     <div className="form-group">
                       <label className="label" htmlFor="tendangnhap">
                         Tên đăng nhập:{" "}
                         <span style={{ color: "#FF4747" }}>*</span>
                       </label>
-                      <br />
                       <input
                         type="text"
                         className="form-control"
                         id="tendangnhap"
-                        name="tendangnhap"
                         placeholder="Nhập tên đăng nhập"
+                        value={accountName}
+                        onChange={(e) => setAccountName(e.target.value)}
                       />
                     </div>
                     <div className="form-group">
@@ -127,15 +211,14 @@ const AccountManagementAdd = () => {
                           type={showPassword ? "text" : "password"}
                           className="form-control"
                           id="matkhau"
-                          name="matkhau"
                           placeholder="Nhập mật khẩu"
-                          onChange={(e) => setPassword(e.target.value)}
                           value={password}
+                          onChange={(e) => setPassword(e.target.value)}
                         />
                         <button
                           type="button"
                           className="toggle-password"
-                          onClick={togglePasswordVisibility}
+                          onClick={() => setShowPassword(!showPassword)}
                           style={{
                             position: "absolute",
                             right: "16px",
@@ -226,7 +309,7 @@ const AccountManagementAdd = () => {
                                 ></path>
                               </g>
                             </svg>
-                          )}
+                          )}{" "}
                         </button>
                       </div>
                     </div>
@@ -243,15 +326,14 @@ const AccountManagementAdd = () => {
                           type={showRePassword ? "text" : "password"}
                           className="form-control"
                           id="nhaplaimatkhau"
-                          name="nhaplaimatkhau"
+                          placeholder="Nhập lại mật khẩu"
                           value={rePassword}
                           onChange={(e) => setRePassword(e.target.value)}
-                          placeholder="Nhập lại mật khẩu"
                         />
                         <button
                           type="button"
                           className="toggle-password"
-                          onClick={toggleRePasswordVisibility}
+                          onClick={() => setShowRePassword(!showRePassword)}
                           style={{
                             position: "absolute",
                             right: "16px",
@@ -342,7 +424,7 @@ const AccountManagementAdd = () => {
                                 ></path>
                               </g>
                             </svg>
-                          )}
+                          )}{" "}
                         </button>
                       </div>
                     </div>
@@ -352,7 +434,7 @@ const AccountManagementAdd = () => {
                       </label>
                       <CustomDropdown
                         options={optionsStatus}
-                        onSelect={handleSelect}
+                        onSelect={handleSelectStatus}
                         style={{ width: "100%", height: "38px" }}
                       />
                     </div>
@@ -369,7 +451,7 @@ const AccountManagementAdd = () => {
             <div className="btn-form-footer-cancel p-2" onClick={cancelPage}>
               <ButtonFormCancel btn_name="Hủy bỏ" />
             </div>
-            <div className="btn-form-footer-add p-2" onClick={addNew}>
+            <div className="btn-form-footer-add p-2" onClick={handleUpload}>
               <ButtonFormAdd btn_name="Thêm" />
             </div>
           </div>

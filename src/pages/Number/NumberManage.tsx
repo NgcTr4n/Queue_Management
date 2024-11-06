@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../../layout/Layout";
 // import "./Device.css";
 import CustomDropdown from "../../components/Dropdown/CustomDropdown";
@@ -7,6 +7,10 @@ import ButtonAdd from "../../components/Button/ButtonAdd/ButtonAdd";
 import DevicePage from "../../components/Table/TablePage/DevicePage";
 import DateRangePicker from "../../components/DateRangePicker/DateRangePicker";
 import NumberPage from "../../components/Table/TablePage/NumberPage";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../app/store";
+import { useAppSelector } from "../../hooks/hooks";
+import { fetchLevel } from "../../features/levelSlice";
 
 const sampleLevel = [
   {
@@ -36,6 +40,24 @@ const sampleLevel = [
     statusLevel: "Đang chờ",
     source: "Hệ thống",
   },
+  {
+    serialNumber: "2010004",
+    customerName: "Nguyễn Ái Vân",
+    serviceName: "Khám tai mũi họng",
+    issueTime: "14:35 - 07/11/2021",
+    expirationTime: "14:35 - 12/11/2021",
+    statusLevel: "Đang chờ",
+    source: "Hệ thống",
+  },
+  {
+    serialNumber: "2010005",
+    customerName: "Trần Thị Ái Vân",
+    serviceName: "Khám hô hấp",
+    issueTime: "14:35 - 07/11/2021",
+    expirationTime: "14:35 - 12/11/2021",
+    statusLevel: "Đang chờ",
+    source: "Hệ thống",
+  },
 ];
 
 const optionServicee = [
@@ -59,6 +81,8 @@ const optionPowerSupply = [
 ];
 
 const NumberManage = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { level, loading, error } = useAppSelector((state) => state.level);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("tatca");
   const [selectedService, setSelectedService] = useState("tatca");
@@ -67,6 +91,9 @@ const NumberManage = () => {
     null,
     null,
   ]); // Explicit type for date range
+  useEffect(() => {
+    dispatch(fetchLevel());
+  }, [dispatch]);
   const handleSelectStatus = (value: string) => {
     setSelectedStatus(value);
     console.log("Selected status:", value);
@@ -182,7 +209,7 @@ const NumberManage = () => {
                   <div className="col-4">
                     <p>Chọn thời gian</p>
                     <div className="d-flex align-items-center device-dropdown">
-                      <DateRangePicker onChange={handleDateRangeChange} />
+                      <DateRangePicker />
                     </div>
                   </div>
                   <div className="col-2 d-flex justify-content-end align-items-center">

@@ -5,12 +5,14 @@ import "./DeviceAdd.css";
 import ButtonFormAdd from "../../components/Button/ButtonForm/ButtonFormAdd/ButtonFormAdd";
 import ButtonFormCancel from "../../components/Button/ButtonForm/ButtonFormCancel/ButtonFormCancel";
 import { useNavigate, useParams } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { updateData } from "../../features/deviceSlice";
 
 type DeviceData = {
   deviceCode: string;
   deviceName: string;
   ipAddress: string;
-  services: string;
+  serviceName: string;
   deviceType: string;
   accountName: string;
   password: string;
@@ -22,34 +24,47 @@ const optionsDevice = [
 ];
 
 const DeviceUpdate = () => {
-  const { deviceCode } = useParams<{ deviceCode: string }>(); // Assume `deviceCode` is passed via URL
+  const { id } = useParams<{ id: string }>();
+  const dispatch = useAppDispatch();
+
+  // Assuming the state has the following shape
+  const { device, loading, error } = useAppSelector((state) => state.device);
+
   const navigate = useNavigate();
   const [deviceData, setDeviceData] = useState<DeviceData>({
     deviceCode: "",
     deviceName: "",
     ipAddress: "",
-    services: "",
+    serviceName: "",
     deviceType: "",
     accountName: "",
     password: "",
   });
 
   useEffect(() => {
-    // Replace with actual API call to fetch device by `deviceCode`
-    const fetchDeviceData = async () => {
-      const mockData = {
-        deviceCode: deviceCode || "DEV001",
-        deviceName: "Sample Device",
-        ipAddress: "192.168.1.1",
-        services: "Service A, Service B",
-        deviceType: "kiosk",
-        accountName: "admin",
-        password: "password123",
-      };
-      setDeviceData(mockData);
-    };
-    fetchDeviceData();
-  }, [deviceCode]);
+    console.log("Current ID:", id);
+    console.log("Devices from Redux state:", device);
+
+    if (id) {
+      // Check if device is an array and has devices
+      if (Array.isArray(device) && device.length > 0) {
+        // Find the device using the correct field
+        const foundDevice = device.find((d) => d.id === id); // Change deviceCode to id
+        console.log("Found device:", foundDevice); // Check what is found
+        if (foundDevice) {
+          setDeviceData({
+            deviceCode: foundDevice.deviceCode,
+            deviceName: foundDevice.deviceName,
+            ipAddress: foundDevice.ipAddress,
+            serviceName: foundDevice.serviceName,
+            deviceType: foundDevice.deviceType,
+            accountName: foundDevice.accountName,
+            password: foundDevice.password,
+          });
+        }
+      }
+    }
+  }, [device, id]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -60,13 +75,38 @@ const DeviceUpdate = () => {
     setDeviceData((prevData) => ({ ...prevData, deviceType: value }));
   };
 
-  const cancelPage = () => {
-    navigate("/device");
+  const updateDevice = async () => {
+    if (id) {
+      // Basic validation
+      if (!deviceData.deviceName || !deviceData.ipAddress) {
+        alert("Please fill in all required fields.");
+        return;
+      }
+
+      console.log("Updating device with data:", {
+        ...deviceData,
+        id,
+      });
+
+      try {
+        await dispatch(
+          updateData({
+            ...deviceData,
+            id,
+            status: "Hoạt động",
+            connection: "Kết nối",
+          })
+        ).unwrap(); // Assuming updateData is an async thunk
+
+        navigate("/device");
+      } catch (err) {
+        console.error("Failed to update device:", err); // Log the error
+        alert("Failed to update device. Please try again later.");
+      }
+    }
   };
 
-  const updateDevice = () => {
-    // Replace with actual API call to update device
-    console.log("Updated device data:", deviceData);
+  const cancelPage = () => {
     navigate("/device");
   };
 
@@ -172,8 +212,8 @@ const DeviceUpdate = () => {
                     type="text"
                     className="form-control"
                     id="services"
-                    name="services"
-                    value={deviceData.services}
+                    name="serviceName"
+                    value={deviceData.serviceName}
                     onChange={handleInputChange}
                   />
                 </div>

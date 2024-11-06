@@ -1,5 +1,4 @@
-// src/PageOne.tsx
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import TableComponent from "../TableComponent";
 import PaginationComponent from "../PaginationComponent";
 
@@ -8,54 +7,45 @@ type TableRow = {
   serviceStatus: string;
 };
 
-const ServicePage: React.FC = () => {
+type ServiceDetailPageProps = {
+  serialNumbers: string[]; // Accept serial numbers as an array
+  serviceStatus: string;
+};
+
+const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({
+  serialNumbers,
+  serviceStatus,
+}) => {
+  // Map serial numbers to the table format
+  const data: TableRow[] = serialNumbers.map((serialNumber) => ({
+    serialNumber,
+    serviceStatus, // Assuming all have the same status for simplicity
+  }));
+
   const columns = [
     { label: "Số thứ tự", key: "serialNumber" },
     { label: "Trạng thái", key: "serviceStatus" },
   ];
-
-  const allData: TableRow[] = [
-    {
-      serialNumber: "2010001",
-      serviceStatus: "Đã hoàn thành",
-    },
-    {
-      serialNumber: "2010002",
-      serviceStatus: "Đã hoàn thành",
-    },
-    {
-      serialNumber: "2010003",
-      serviceStatus: "Đang thực hiện",
-    },
-    {
-      serialNumber: "2010004",
-      serviceStatus: "Vắng",
-    },
-    {
-      serialNumber: "2010005",
-      serviceStatus: "Đã hoàn thành",
-    },
-  ];
-
-  const itemsPerPage = 8;
+  const itemsPerPage = 6; // Define how many items to show per page
   const [currentPage, setCurrentPage] = useState(1);
-  const [data, setData] = useState<TableRow[]>([]);
+  const [paginatedRole, setPaginatedRole] = useState<TableRow[]>([]);
 
   useEffect(() => {
+    // Update the paginated devices whenever the devices prop or currentPage changes
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    setData(allData.slice(startIndex, endIndex));
-  }, [currentPage]);
-
-  const totalPages = Math.ceil(allData.length / itemsPerPage);
-
+    setPaginatedRole(data.slice(startIndex, endIndex));
+  }, [data, currentPage]); // Dependency array includes devices
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
-
+  const totalPages = Math.ceil(data.length / itemsPerPage);
+  const tableData = paginatedRole.map((row) => ({
+    ...row,
+  }));
   return (
     <div>
-      <TableComponent columns={columns} data={data} />
+      <TableComponent columns={columns} data={tableData} />
       <PaginationComponent
         currentPage={currentPage}
         totalPages={totalPages}
@@ -65,4 +55,4 @@ const ServicePage: React.FC = () => {
   );
 };
 
-export default ServicePage;
+export default ServiceDetailPage;

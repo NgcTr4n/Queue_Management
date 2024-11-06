@@ -34,7 +34,7 @@ const LevelDetail: React.FC = () => {
       serviceName: "Khám tim mạch",
       issueTime: "14:35 - 07/11/2021",
       expirationTime: "14:35 - 12/11/2021",
-      statusLevel: "Đã sử dụng,",
+      statusLevel: "Đã sử dụng",
       source: "Kiosk",
       phoneNumber: "0901234567",
       email: "vanlehuynhai@gmail.com",

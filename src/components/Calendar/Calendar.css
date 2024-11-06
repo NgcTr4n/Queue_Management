@@ -1,0 +1,40 @@
+.calendar {
+  width: 100%;
+  max-width: 100%;
+  font-family: Arial, sans-serif;
+  border-radius: 12px;
+  background: #fff;
+  /* Pink shadow */
+  box-shadow: 2px 2px 15px 0px rgba(70, 64, 67, 0.1);
+}
+
+.calendar .fw-bold {
+  font-weight: 700;
+}
+
+.bg-orange {
+  background-color: #ff8c00;
+}
+
+.calendar .text-muted {
+  color: #ddd;
+}
+
+.calendar .row {
+  display: flex;
+}
+
+.calendar .col {
+  flex: 1;
+  cursor: pointer;
+  user-select: none;
+}
+
+.calendar .btn-outline-primary {
+  padding: 0.25rem 0.75rem;
+  border: none;
+}
+
+.calendar .text-white {
+  color: white;
+}

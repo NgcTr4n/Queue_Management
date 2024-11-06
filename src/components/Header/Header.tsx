@@ -1,20 +1,55 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Header.css";
 import { breadcrumbPaths, useBreadcrumbs } from "../../hooks/useBreadcrumbs";
 import { Link, useNavigate } from "react-router-dom";
-import avatar from '../../assets/avatar/ava1.jpg'
+import avatar from "../../assets/avatar/ava1.jpg";
+import { AppDispatch } from "../../app/store";
+import { useDispatch } from "react-redux";
+import { auth } from "../../services/firebase";
+import { fetchAccountByEmail } from "../../features/accountSlice";
 
 const Header: React.FC = () => {
   const { breadcrumbs } = useBreadcrumbs();
   const currentPaths = breadcrumbPaths[window.location.pathname] || [];
   const navigate = useNavigate();
-  const showAccountInform = ()=>{
-    navigate("/account")
-  }
+  const showAccountInform = () => {
+    navigate("/account");
+  };
+  const dispatch: AppDispatch = useDispatch(); // Use AppDispatch type
+  const [userData, setUserData] = useState({
+    fullName: "",
+    phoneNumber: "",
+    email: "",
+    accountName: "",
+    password: "",
+    roleName: "",
+  });
+
+  useEffect(() => {
+    const fetchAccount = async () => {
+      const user = auth.currentUser; // Get the current user
+
+      if (user && user.email) {
+        // Check if user is not null and has an email
+        try {
+          const account = await dispatch(
+            fetchAccountByEmail(user.email)
+          ).unwrap();
+          setUserData(account);
+        } catch (error) {
+          console.error("Error fetching account:", error);
+        }
+      } else {
+        console.log("No user is signed in or user has no email.");
+      }
+    };
+
+    fetchAccount();
+  }, [dispatch]);
   return (
     <div className="main-header">
       <div className="header-crumbs">
-        <h5 className="display-5" style={{color:"#FF9138"}}>
+        <h5 className="display-5" style={{ color: "#FF9138" }}>
           {breadcrumbs.length > 0 ? (
             breadcrumbs.map((item, index) => {
               const currentPath = currentPaths[index] || "#";
@@ -77,10 +112,18 @@ const Header: React.FC = () => {
             />
           </svg>{" "}
         </div>
-        <img onClick={showAccountInform} src={avatar} alt="Avatar" className="header-avatar" />
+        <img
+          onClick={showAccountInform}
+          src={avatar}
+          alt="Avatar"
+          className="header-avatar"
+        />
         <div className="header-content">
           <span className="header-greeting">Xin chào</span>
-          <span className="header-username">Phạm Võ Ngọc Trân</span>
+          <span className="header-username">
+            {" "}
+            {userData.fullName || "Phạm Võ Ngọc Trân"}
+          </span>
         </div>
       </div>
     </div>

@@ -31,7 +31,7 @@ const NumberPage: React.FC<LevelPageProps> = ({ level }) => {
     { label: "", key: "action" },
   ];
 
-  const itemsPerPage = 8; // Define how many items to show per page
+  const itemsPerPage = 6; // Define how many items to show per page
   const [currentPage, setCurrentPage] = useState(1);
   const [paginatedLevel, setPaginatedLevel] = useState<TableRow[]>([]);
 

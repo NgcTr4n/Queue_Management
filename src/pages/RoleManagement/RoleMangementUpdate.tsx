@@ -5,41 +5,65 @@ import ButtonFormCancel from "../../components/Button/ButtonForm/ButtonFormCance
 import "./RoleAdd.css";
 import CheckboxGroup from "../../components/CheckboxGroup/CheckboxGroup";
 import { useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../app/store";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { fetchRole, updateData } from "../../features/roleSlice";
 
 type RoleData = {
   roleName: string;
-  roleDesscribe: string;
-  permissionsA: string[];
-  permissionsB: string[];
+  roleDescribe: string;
+  userCount: number;
+  permissionsA: { permissionName: string }[];
+  permissionsB: { permissionName: string }[];
+  permissionsC: { permissionName: string }[];
+  permissionsD: { permissionName: string }[];
+  permissionsE: { permissionName: string }[];
+  permissionsF: { permissionName: string }[];
+  permissionsG: { permissionName: string }[];
 };
 
 const RoleUpdate = () => {
-  const { roleName, roleDesscribe } = useParams<{
-    roleName: string;
-    roleDesscribe: string;
-  }>();
-
+  const { id } = useParams<{ id: string }>(); // Ensure you extract ID correctly
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  const { role, loading, error } = useAppSelector((state) => state.role);
   const [roleData, setRoleData] = useState<RoleData>({
     roleName: "",
-    roleDesscribe: "",
-    permissionsA: [],
-    permissionsB: [],
+    roleDescribe: "",
+    userCount: 0,
+    permissionsA: [{ permissionName: "" }],
+    permissionsB: [{ permissionName: "" }],
+    permissionsC: [{ permissionName: "" }],
+    permissionsD: [{ permissionName: "" }],
+    permissionsE: [{ permissionName: "" }],
+    permissionsF: [{ permissionName: "" }],
+    permissionsG: [{ permissionName: "" }],
   });
-
+  const [loaded, setLoaded] = useState(false);
   useEffect(() => {
-    // Mock API call to fetch role data by roleName (you need to replace this with actual API call)
-    const fetchRoleData = async () => {
-      const mockData = {
-        roleName: roleName || "DEV001",
-        roleDesscribe: roleDesscribe || "Sample description", // Sample data
-        permissionsA: ["x"], // Sample permissions
-        permissionsB: ["a", "b"], // Sample permissions
-      };
-      setRoleData(mockData);
-    };
-    fetchRoleData();
-  }, []); // Use empty array if this is only run on component mount
+    if (id && !loaded) {
+      dispatch(fetchRole()).then(() => {
+        const existingRole = role.find((r) => r.id === id);
+        if (existingRole) {
+          setRoleData({
+            roleName: existingRole.roleName,
+            roleDescribe: existingRole.roleDescribe,
+            userCount: existingRole.userCount,
+            permissionsA: existingRole.permissionsA,
+            permissionsB: existingRole.permissionsB,
+            permissionsC: existingRole.permissionsC,
+            permissionsD: existingRole.permissionsD,
+            permissionsE: existingRole.permissionsE,
+            permissionsF: existingRole.permissionsF,
+            permissionsG: existingRole.permissionsG,
+          });
+          setLoaded(true);
+        }
+      });
+    }
+  }, [dispatch, id, loaded, role]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -51,28 +75,86 @@ const RoleUpdate = () => {
     }));
   };
 
-  const handlePermissionsAChange = (selectedPermissions: string[]) => {
-    setRoleData((prev) => ({
-      ...prev,
-      permissionsA: selectedPermissions,
+  const handlePermissionAChange = (selectedPermissionsA: string[]) => {
+    setRoleData((prevData) => ({
+      ...prevData,
+      permissionsA: selectedPermissionsA.map((permission) => ({
+        permissionName: permission,
+      })),
     }));
   };
 
-  const handlePermissionsBChange = (selectedPermissions: string[]) => {
-    setRoleData((prev) => ({
-      ...prev,
-      permissionsB: selectedPermissions,
+  const handlePermissionBChange = (selectedPermissionsB: string[]) => {
+    setRoleData((prevData) => ({
+      ...prevData,
+      permissionsB: selectedPermissionsB.map((permission) => ({
+        permissionName: permission,
+      })),
     }));
   };
-
+  const handlePermissionCChange = (selectedPermissionsC: string[]) => {
+    setRoleData((prevData) => ({
+      ...prevData,
+      permissionsC: selectedPermissionsC.map((permission) => ({
+        permissionName: permission,
+      })),
+    }));
+  };
+  const handlePermissionDChange = (selectedPermissionsD: string[]) => {
+    setRoleData((prevData) => ({
+      ...prevData,
+      permissionsD: selectedPermissionsD.map((permission) => ({
+        permissionName: permission,
+      })),
+    }));
+  };
+  const handlePermissionEChange = (selectedPermissionsE: string[]) => {
+    setRoleData((prevData) => ({
+      ...prevData,
+      permissionsE: selectedPermissionsE.map((permission) => ({
+        permissionName: permission,
+      })),
+    }));
+  };
+  const handlePermissionFChange = (selectedPermissionsF: string[]) => {
+    setRoleData((prevData) => ({
+      ...prevData,
+      permissionsF: selectedPermissionsF.map((permission) => ({
+        permissionName: permission,
+      })),
+    }));
+  };
+  const handlePermissionGChange = (selectedPermissionsG: string[]) => {
+    setRoleData((prevData) => ({
+      ...prevData,
+      permissionsG: selectedPermissionsG.map((permission) => ({
+        permissionName: permission,
+      })),
+    }));
+  };
   const cancelPage = () => {
     navigate("/setting/rolemanagement");
   };
+  const updateRoleData = async () => {
+    if (id) {
+      if (!roleData.roleName || !roleData.roleDescribe) {
+        alert("Please fill in all required fields.");
+        return;
+      }
 
-  const addNew = () => {
-    // Handle add/update role
-    console.log("Role data:", roleData);
-    navigate("/setting/rolemanagement");
+      try {
+        await dispatch(
+          updateData({
+            ...roleData,
+            id,
+          })
+        ).unwrap();
+        navigate("/setting/rolemanagement");
+      } catch (err) {
+        console.error("Failed to update service:", err);
+        alert("Failed to update service. Please try again later.");
+      }
+    }
   };
 
   return (
@@ -111,10 +193,10 @@ const RoleUpdate = () => {
                       <textarea
                         className="form-control"
                         id="mota"
-                        name="roleDesscribe"
+                        name="roleDescribe"
                         placeholder="Nhập mô tả"
                         style={{ height: "160px" }}
-                        value={roleData.roleDesscribe}
+                        value={roleData.roleDescribe}
                         onChange={handleInputChange}
                       />
                     </div>
@@ -134,16 +216,88 @@ const RoleUpdate = () => {
                     style={{ overflowY: "auto", maxHeight: "420px" }}
                   >
                     <CheckboxGroup
-                      title="Nhóm chức năng A"
-                      options={["x", "y", "z"]}
-                      selectedOptions={roleData.permissionsA}
-                      onChange={handlePermissionsAChange}
+                      title="Quản lý Hồ sơ Bệnh nhân"
+                      options={[
+                        "Xem hồ sơ bệnh nhân",
+                        "Chỉnh sửa hồ sơ bệnh nhân",
+                        "Thêm hồ sơ mới",
+                      ]}
+                      selectedOptions={roleData.permissionsA.map(
+                        (item) => item.permissionName
+                      )}
+                      onChange={handlePermissionAChange}
                     />
                     <CheckboxGroup
-                      title="Nhóm chức năng B"
-                      options={["a", "b", "c"]}
-                      selectedOptions={roleData.permissionsB}
-                      onChange={handlePermissionsBChange}
+                      title="Chẩn đoán và Điều trị"
+                      options={[
+                        "Kê đơn thuốc",
+                        "Ghi chép chẩn đoán",
+                        "Theo dõi tiến trình điều trị",
+                      ]}
+                      selectedOptions={roleData.permissionsB.map(
+                        (item) => item.permissionName
+                      )} // Pass as string[]
+                      onChange={handlePermissionBChange}
+                    />
+                    <CheckboxGroup
+                      title="Quản lý Tài chính"
+                      options={[
+                        "Theo dõi thu chi",
+                        "Quản lý hóa đơn",
+                        "Lập báo cáo tài chính",
+                      ]}
+                      selectedOptions={roleData.permissionsC.map(
+                        (item) => item.permissionName
+                      )} // Pass as string[]
+                      onChange={handlePermissionCChange}
+                    />
+                    <CheckboxGroup
+                      title="Quản lý Nhân sự"
+                      options={[
+                        "Thêm nhân viên mới",
+                        "Xóa nhân viên",
+                        "Cập nhật thông tin nhân viên",
+                      ]}
+                      selectedOptions={roleData.permissionsD.map(
+                        (item) => item.permissionName
+                      )} // Pass as string[]
+                      onChange={handlePermissionDChange}
+                    />
+                    <CheckboxGroup
+                      title="Lịch làm việc"
+                      options={[
+                        "Quản lý lịch khám",
+                        "Đặt lịch hẹn cho bệnh nhân",
+                        "Thông báo lịch hẹn",
+                      ]}
+                      selectedOptions={roleData.permissionsE.map(
+                        (item) => item.permissionName
+                      )} // Pass as string[]
+                      onChange={handlePermissionEChange}
+                    />
+                    <CheckboxGroup
+                      title="Báo cáo và Phân tích"
+                      options={[
+                        "Tạo báo cáo hiệu suất",
+                        "Phân tích dữ liệu tài chính",
+                        "Đánh giá hiệu suất nhân viên",
+                      ]}
+                      selectedOptions={roleData.permissionsF.map(
+                        (item) => item.permissionName
+                      )} // Pass as string[]
+                      onChange={handlePermissionFChange}
+                    />
+                    <CheckboxGroup
+                      title="Hỗ trợ Kỹ thuật"
+                      options={[
+                        "Giải quyết sự cố kỹ thuật",
+                        "Cập nhật hệ thống",
+                        "Đào tạo người dùng mới",
+                      ]}
+                      selectedOptions={roleData.permissionsG.map(
+                        (item) => item.permissionName
+                      )} // Pass as string[]
+                      onChange={handlePermissionGChange}
                     />
                   </div>
                 </div>
@@ -154,8 +308,8 @@ const RoleUpdate = () => {
             <div className="btn-form-footer-cancel p-2" onClick={cancelPage}>
               <ButtonFormCancel btn_name="Hủy bỏ" />
             </div>
-            <div className="btn-form-footer-add p-2" onClick={addNew}>
-              <ButtonFormAdd btn_name="Thêm" />
+            <div className="btn-form-footer-add p-2" onClick={updateRoleData}>
+              <ButtonFormAdd btn_name="Cập nhật" />
             </div>
           </div>
         </div>

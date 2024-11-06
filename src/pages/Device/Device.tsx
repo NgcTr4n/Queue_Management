@@ -1,132 +1,136 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../../layout/Layout";
 import "./Device.css";
 import CustomDropdown from "../../components/Dropdown/CustomDropdown";
 import SearchInput from "../../components/SearchInput/SearchInput"; // Import the new SearchInput component
 import ButtonAdd from "../../components/Button/ButtonAdd/ButtonAdd";
 import DevicePage from "../../components/Table/TablePage/DevicePage";
-const sampleDevices = [
-  {
-    deviceCode: "KIO_01",
-    deviceName: "Kiosk",
-    ipAddress: "192.168.1.10",
-    status: "Hoạt động",
-    connection: "Kết nối",
-    services: "Khám tim mạch, Khám mắt...",
-  },
-  {
-    deviceCode: "KIO_02",
-    deviceName: "Kiosk",
-    ipAddress: "192.168.1.11",
-    status: "Ngưng hoạt động",
-    connection: "Mất kết nối",
-    services: "Khám sức khỏe, Khám mắt...",
-  },
-  {
-    deviceCode: "KIO_03",
-    deviceName: "Kiosk",
-    ipAddress: "192.168.1.12",
-    status: "Hoạt động",
-    connection: "Kết nối",
-    services: "Khám tim mạch, Khám mắt...",
-  },
-  {
-    deviceCode: "KIO_04",
-    deviceName: "Kiosk",
-    ipAddress: "192.168.1.13",
-    status: "Hoạt động",
-    connection: "Kết nối",
-    services: "Khám sức khỏe, Khám mắt...",
-  },
-  {
-    deviceCode: "KIO_05",
-    deviceName: "Kiosk",
-    ipAddress: "192.168.1.14",
-    status: "Ngưng hoạt động",
-    connection: "Mất kết nối",
-    services: "Khám tim mạch, Khám mắt...",
-  },
-  {
-    deviceCode: "KIO_06",
-    deviceName: "Kiosk",
-    ipAddress: "192.168.1.15",
-    status: "Hoạt động",
-    connection: "Kết nối",
-    services: "Khám tổng quát, Khám tai mũi họng...",
-  },
-  {
-    deviceCode: "KIO_07",
-    deviceName: "Kiosk",
-    ipAddress: "192.168.1.16",
-    status: "Ngưng hoạt động",
-    connection: "Mất kết nối",
-    services: "Khám sức khỏe, Khám nội tiết...",
-  },
-  {
-    deviceCode: "KIO_08",
-    deviceName: "Kiosk",
-    ipAddress: "192.168.1.17",
-    status: "Hoạt động",
-    connection: "Kết nối",
-    services: "Khám tim mạch, Khám da liễu...",
-  },
-  {
-    deviceCode: "KIO_09",
-    deviceName: "Kiosk",
-    ipAddress: "192.168.1.18",
-    status: "Ngưng hoạt động",
-    connection: "Mất kết nối",
-    services: "Khám sức khỏe, Khám mắt...",
-  },
-  {
-    deviceCode: "KIO_10",
-    deviceName: "Kiosk",
-    ipAddress: "192.168.1.19",
-    status: "Hoạt động",
-    connection: "Kết nối",
-    services: "Khám tim mạch, Khám tâm lý...",
-  },
-  {
-    deviceCode: "KIO_11",
-    deviceName: "Kiosk",
-    ipAddress: "192.168.1.20",
-    status: "Ngưng hoạt động",
-    connection: "Mất kết nối",
-    services: "Khám nội tiết, Khám phụ khoa...",
-  },
-  {
-    deviceCode: "KIO_12",
-    deviceName: "Kiosk",
-    ipAddress: "192.168.1.21",
-    status: "Hoạt động",
-    connection: "Kết nối",
-    services: "Khám tổng quát, Khám mắt...",
-  },
-  {
-    deviceCode: "KIO_13",
-    deviceName: "Kiosk",
-    ipAddress: "192.168.1.22",
-    status: "Ngưng hoạt động",
-    connection: "Mất kết nối",
-    services: "Khám tim mạch, Khám thần kinh...",
-  },
-  {
-    deviceCode: "KIO_14",
-    deviceName: "Kiosk",
-    ipAddress: "192.168.1.23",
-    status: "Hoạt động",
-    connection: "Kết nối",
-    services: "Khám sức khỏe, Khám mắt...",
-  },
-  {
-    deviceCode: "KIO_15",
-    deviceName: "Kiosk",
-    ipAddress: "192.168.1.24",
-    status: "Ngưng hoạt động",
-    connection: "Mất kết nối",
-    services: "Khám tim mạch, Khám tiêu hóa...",
-  },
-];
+import { useDispatch } from "react-redux";
+import { useAppSelector } from "../../hooks/hooks";
+import { fetchDevice } from "../../features/deviceSlice";
+import { AppDispatch } from "../../app/store";
+// const sampleDevices = [
+//   {
+//     deviceCode: "KIO_01",
+//     deviceName: "Kiosk",
+//     ipAddress: "192.168.1.10",
+//     status: "Hoạt động",
+//     connection: "Kết nối",
+//     services: "Khám tim mạch, Khám mắt...",
+//   },
+//   {
+//     deviceCode: "KIO_02",
+//     deviceName: "Kiosk",
+//     ipAddress: "192.168.1.11",
+//     status: "Ngưng hoạt động",
+//     connection: "Mất kết nối",
+//     services: "Khám sức khỏe, Khám mắt...",
+//   },
+//   {
+//     deviceCode: "KIO_03",
+//     deviceName: "Kiosk",
+//     ipAddress: "192.168.1.12",
+//     status: "Hoạt động",
+//     connection: "Kết nối",
+//     services: "Khám tim mạch, Khám mắt...",
+//   },
+//   {
+//     deviceCode: "KIO_04",
+//     deviceName: "Kiosk",
+//     ipAddress: "192.168.1.13",
+//     status: "Hoạt động",
+//     connection: "Kết nối",
+//     services: "Khám sức khỏe, Khám mắt...",
+//   },
+//   {
+//     deviceCode: "KIO_05",
+//     deviceName: "Kiosk",
+//     ipAddress: "192.168.1.14",
+//     status: "Ngưng hoạt động",
+//     connection: "Mất kết nối",
+//     services: "Khám tim mạch, Khám mắt...",
+//   },
+//   {
+//     deviceCode: "KIO_06",
+//     deviceName: "Kiosk",
+//     ipAddress: "192.168.1.15",
+//     status: "Hoạt động",
+//     connection: "Kết nối",
+//     services: "Khám tổng quát, Khám tai mũi họng...",
+//   },
+//   {
+//     deviceCode: "KIO_07",
+//     deviceName: "Kiosk",
+//     ipAddress: "192.168.1.16",
+//     status: "Ngưng hoạt động",
+//     connection: "Mất kết nối",
+//     services: "Khám sức khỏe, Khám nội tiết...",
+//   },
+//   {
+//     deviceCode: "KIO_08",
+//     deviceName: "Kiosk",
+//     ipAddress: "192.168.1.17",
+//     status: "Hoạt động",
+//     connection: "Kết nối",
+//     services: "Khám tim mạch, Khám da liễu...",
+//   },
+//   {
+//     deviceCode: "KIO_09",
+//     deviceName: "Kiosk",
+//     ipAddress: "192.168.1.18",
+//     status: "Ngưng hoạt động",
+//     connection: "Mất kết nối",
+//     services: "Khám sức khỏe, Khám mắt...",
+//   },
+//   {
+//     deviceCode: "KIO_10",
+//     deviceName: "Kiosk",
+//     ipAddress: "192.168.1.19",
+//     status: "Hoạt động",
+//     connection: "Kết nối",
+//     services: "Khám tim mạch, Khám tâm lý...",
+//   },
+//   {
+//     deviceCode: "KIO_11",
+//     deviceName: "Kiosk",
+//     ipAddress: "192.168.1.20",
+//     status: "Ngưng hoạt động",
+//     connection: "Mất kết nối",
+//     services: "Khám nội tiết, Khám phụ khoa...",
+//   },
+//   {
+//     deviceCode: "KIO_12",
+//     deviceName: "Kiosk",
+//     ipAddress: "192.168.1.21",
+//     status: "Hoạt động",
+//     connection: "Kết nối",
+//     services: "Khám tổng quát, Khám mắt...",
+//   },
+//   {
+//     deviceCode: "KIO_13",
+//     deviceName: "Kiosk",
+//     ipAddress: "192.168.1.22",
+//     status: "Ngưng hoạt động",
+//     connection: "Mất kết nối",
+//     services: "Khám tim mạch, Khám thần kinh...",
+//   },
+//   {
+//     deviceCode: "KIO_14",
+//     deviceName: "Kiosk",
+//     ipAddress: "192.168.1.23",
+//     status: "Hoạt động",
+//     connection: "Kết nối",
+//     services: "Khám sức khỏe, Khám mắt...",
+//   },
+//   {
+//     deviceCode: "KIO_15",
+//     deviceName: "Kiosk",
+//     ipAddress: "192.168.1.24",
+//     status: "Ngưng hoạt động",
+//     connection: "Mất kết nối",
+//     services: "Khám tim mạch, Khám tiêu hóa...",
+//   },
+// ];
 const optionActive = [
   { label: "Tất cả", value: "tatca" },
   { label: "Hoạt động", value: "hoatdong" },
@@ -140,6 +144,8 @@ const optionConnection = [
 ];
 
 const Device = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { device, loading, error } = useAppSelector((state) => state.device);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("tatca");
   const [selectedConnection, setSelectedConnection] = useState("tatca");
@@ -158,7 +164,11 @@ const Device = () => {
     console.log("Search input:", value);
   };
 
-  const filteredDevices = sampleDevices.filter((device) => {
+  useEffect(() => {
+    dispatch(fetchDevice());
+  }, [dispatch]);
+
+  const filteredDevices = device.filter((device) => {
     const matchesSearchTerm =
       device.deviceCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
       device.deviceName.toLowerCase().includes(searchTerm.toLowerCase()) ||

@@ -29,7 +29,7 @@ const UserLog = () => {
                   <div className="col-4">
                     <p>Chọn thời gian</p>
                     <div className="d-flex align-items-center device-dropdown">
-                      {/* <DateRangePicker /> */}
+                      <DateRangePicker />
                     </div>
                   </div>
                   <div className="col-6"></div>

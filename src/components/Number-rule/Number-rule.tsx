@@ -1,14 +1,37 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { Form, Row, Col } from "react-bootstrap";
 import "./Number-rule.css";
 
-const NumberRuleForm: React.FC = () => {
-  const [autoIncrement, setAutoIncrement] = useState(false);
-  const [prefix, setPrefix] = useState("");
-  const [suffix, setSuffix] = useState("");
-  const [resetDaily, setResetDaily] = useState(false);
-  const [rangeStart, setRangeStart] = useState("0001");
-  const [rangeEnd, setRangeEnd] = useState("9999");
+interface NumberRuleFormProps {
+  numberRule: {
+    autoIncrement: boolean;
+    prefix: string;
+    suffix: string;
+    resetDaily: boolean;
+    rangeStart: string;
+    rangeEnd: string;
+  };
+  onChange: (numberRule: {
+    autoIncrement: boolean;
+    prefix: string;
+    suffix: string;
+    resetDaily: boolean;
+    rangeStart: string;
+    rangeEnd: string;
+  }) => void;
+}
+
+const NumberRuleForm: React.FC<NumberRuleFormProps> = ({
+  numberRule,
+  onChange,
+}) => {
+  const { autoIncrement, prefix, suffix, resetDaily, rangeStart, rangeEnd } =
+    numberRule;
+
+  // Whenever any state changes, notify the parent
+  useEffect(() => {
+    onChange(numberRule);
+  }, [autoIncrement, prefix, suffix, resetDaily, rangeStart, rangeEnd]);
 
   return (
     <div className="pt-1 number-rule-form">
@@ -19,25 +42,31 @@ const NumberRuleForm: React.FC = () => {
               type="checkbox"
               label="Tăng tự động từ:"
               checked={autoIncrement}
-              onChange={() => setAutoIncrement(!autoIncrement)}
+              onChange={() =>
+                onChange({ ...numberRule, autoIncrement: !autoIncrement })
+              }
             />
           </Col>
           <Col sm="auto">
             <Form.Control
               type="text"
               value={rangeStart}
-              onChange={(e) => setRangeStart(e.target.value)}
+              onChange={(e) =>
+                onChange({ ...numberRule, rangeStart: e.target.value })
+              }
               disabled={!autoIncrement}
             />
           </Col>
-          <Col sm="auto" className="d-flex align-items-center ">
+          <Col sm="auto" className="d-flex align-items-center">
             đến
           </Col>
           <Col sm="auto">
             <Form.Control
               type="text"
               value={rangeEnd}
-              onChange={(e) => setRangeEnd(e.target.value)}
+              onChange={(e) =>
+                onChange({ ...numberRule, rangeEnd: e.target.value })
+              }
               disabled={!autoIncrement}
             />
           </Col>
@@ -49,14 +78,18 @@ const NumberRuleForm: React.FC = () => {
               type="checkbox"
               label="Prefix:"
               checked={!!prefix}
-              onChange={() => setPrefix(prefix ? "" : "0001")}
+              onChange={() =>
+                onChange({ ...numberRule, prefix: prefix ? "" : "0001" })
+              }
             />
           </Col>
           <Col sm="auto">
             <Form.Control
               type="text"
               value={prefix}
-              onChange={(e) => setPrefix(e.target.value)}
+              onChange={(e) =>
+                onChange({ ...numberRule, prefix: e.target.value })
+              }
               disabled={!prefix}
             />
           </Col>
@@ -66,16 +99,20 @@ const NumberRuleForm: React.FC = () => {
           <Col sm="auto">
             <Form.Check
               type="checkbox"
-              label="Surfix:"
+              label="Suffix:"
               checked={!!suffix}
-              onChange={() => setSuffix(suffix ? "" : "0001")}
+              onChange={() =>
+                onChange({ ...numberRule, suffix: suffix ? "" : "0001" })
+              }
             />
           </Col>
           <Col sm="auto">
             <Form.Control
               type="text"
               value={suffix}
-              onChange={(e) => setSuffix(e.target.value)}
+              onChange={(e) =>
+                onChange({ ...numberRule, suffix: e.target.value })
+              }
               disabled={!suffix}
             />
           </Col>
@@ -87,7 +124,9 @@ const NumberRuleForm: React.FC = () => {
               type="checkbox"
               label="Reset mỗi ngày"
               checked={resetDaily}
-              onChange={() => setResetDaily(!resetDaily)}
+              onChange={() =>
+                onChange({ ...numberRule, resetDaily: !resetDaily })
+              }
             />
           </Col>
         </Form.Group>

@@ -5,6 +5,7 @@ import PaginationComponent from "../PaginationComponent";
 import { useNavigate } from "react-router-dom";
 
 type TableRow = {
+  id: string;
   accountName: string;
   fullName: string;
   phoneNumber: string;
@@ -12,8 +13,10 @@ type TableRow = {
   roleName: string;
   status: string;
 };
-
-const AccountPage: React.FC = () => {
+type AccountPageProps = {
+  account: TableRow[];
+};
+const AccountPage: React.FC<AccountPageProps> = ({ account }) => {
   const navigate = useNavigate();
 
   const columns = [
@@ -26,64 +29,30 @@ const AccountPage: React.FC = () => {
     { label: "", key: "update" },
   ];
 
-  const allData: TableRow[] = [
-    {
-      accountName: "tuyetnguyen@12",
-      fullName: "Nguyen Van A",
-      phoneNumber: "0919256712",
-      email: "tuyetnguyen123@gmail.com",
-      roleName: "Kế toán",
-      status: "Hoạt động",
-    },
-    {
-      accountName: "tuyetnguyen@10",
-      fullName: "Nguyen Van B",
-      phoneNumber: "0919236712",
-      email: "tuyetnguyen123@gmail.com",
-      roleName: "Kế toán",
-      status: "Hoạt động",
-    },
-    {
-      accountName: "tuyetnguyen@22",
-      fullName: "Nguyen Van C",
-      phoneNumber: "0919116712",
-      email: "tuyetnguyen222@gmail.com",
-      roleName: "Kế toán",
-      status: "Ngưng hoạt động",
-    },
-    {
-      accountName: "tuyetnguyen@18",
-      fullName: "Nguyen Van D",
-      phoneNumber: "0919253715",
-      email: "tuyetnguyen232@gmail.com",
-      roleName: "Kế toán",
-      status: "Hoạt động",
-    },
-  ];
-
-  const itemsPerPage = 8;
+  const itemsPerPage = 6; // Define how many items to show per page
   const [currentPage, setCurrentPage] = useState(1);
-  const [data, setData] = useState<TableRow[]>([]);
+  const [paginatedAccount, setPaginatedAccount] = useState<TableRow[]>([]);
 
   useEffect(() => {
+    // Update the paginated devices whenever the devices prop or currentPage changes
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    setData(allData.slice(startIndex, endIndex));
-  }, [currentPage]);
+    setPaginatedAccount(account.slice(startIndex, endIndex));
+  }, [account, currentPage]); // Dependency array includes devices
 
-  const totalPages = Math.ceil(allData.length / itemsPerPage);
+  const totalPages = Math.ceil(account.length / itemsPerPage);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
-  const handleUpdateClick = (accountName: string) => {
-    navigate(`/setting/accountmanagement/${accountName}/update`);
+  const handleUpdateClick = (id: string) => {
+    navigate(`/setting/accountmanagement/${id}/update`);
   };
-  const tableData = data.map((row) => ({
+  const tableData = paginatedAccount.map((row) => ({
     ...row,
     update: (
       <div>
-        <a href="" onClick={() => handleUpdateClick(row.accountName)}>
+        <a href="" onClick={() => handleUpdateClick(row.id)}>
           Cập nhật
         </a>
       </div>

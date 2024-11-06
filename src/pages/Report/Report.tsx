@@ -52,7 +52,7 @@ const Report = () => {
                   <div className="col">
                     <p>Chọn thời gian</p>
                     <div className="d-flex align-items-center device-dropdown">
-                      {/* <DateRangePicker /> */}
+                      <DateRangePicker />
                     </div>
                   </div>
                 </div>

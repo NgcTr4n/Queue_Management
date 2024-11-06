@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../../layout/Layout";
 import "./Service.css";
 import CustomDropdown from "../../components/Dropdown/CustomDropdown";
@@ -7,98 +7,102 @@ import ButtonAdd from "../../components/Button/ButtonAdd/ButtonAdd";
 import DevicePage from "../../components/Table/TablePage/DevicePage";
 import ServicePage from "../../components/Table/TablePage/ServicePage";
 import DateRangePicker from "../../components/DateRangePicker/DateRangePicker";
-const sampleService = [
-  {
-    serviceCode: "KIO_01",
-    serviceName: "Kiosk",
-    serviceDescribe: "Hoạt động",
-    status: "Hoạt động",
-  },
-  {
-    serviceCode: "KIO_02",
-    serviceName: "Kiosk",
-    serviceDescribe: "Ngưng hoạt động",
-    status: "Ngưng hoạt động",
-  },
-  {
-    serviceCode: "KIO_03",
-    serviceName: "Kiosk",
-    serviceDescribe: "Hoạt động",
-    status: "Hoạt động",
-  },
-  {
-    serviceCode: "KIO_04",
-    serviceName: "Kiosk",
-    serviceDescribe: "Hoạt động",
-    status: "Hoạt động",
-  },
-  {
-    serviceCode: "KIO_05",
-    serviceName: "Kiosk",
-    serviceDescribe: "Ngưng hoạt động",
-    status: "Ngưng hoạt động",
-  },
-  {
-    serviceCode: "KIO_06",
-    serviceName: "Kiosk",
-    serviceDescribe: "Hoạt động",
-    status: "Hoạt động",
-  },
-  {
-    serviceCode: "KIO_07",
-    serviceName: "Kiosk",
-    serviceDescribe: "Ngưng hoạt động",
-    status: "Ngưng hoạt động",
-  },
-  {
-    serviceCode: "KIO_08",
-    serviceName: "Kiosk",
-    serviceDescribe: "Hoạt động",
-    status: "Hoạt động",
-  },
-  {
-    serviceCode: "KIO_09",
-    serviceName: "Kiosk",
-    serviceDescribe: "Ngưng hoạt động",
-    status: "Ngưng hoạt động",
-  },
-  {
-    serviceCode: "KIO_10",
-    serviceName: "Kiosk",
-    serviceDescribe: "Hoạt động",
-    status: "Hoạt động",
-  },
-  {
-    serviceCode: "KIO_11",
-    serviceName: "Kiosk",
-    serviceDescribe: "Ngưng hoạt động",
-    status: "Ngưng hoạt động",
-  },
-  {
-    serviceCode: "KIO_12",
-    serviceName: "Kiosk",
-    serviceDescribe: "Hoạt động",
-    status: "Hoạt động",
-  },
-  {
-    serviceCode: "KIO_13",
-    serviceName: "Kiosk",
-    serviceDescribe: "Ngưng hoạt động",
-    status: "Ngưng hoạt động",
-  },
-  {
-    serviceCode: "KIO_14",
-    serviceName: "Kiosk",
-    serviceDescribe: "Hoạt động",
-    status: "Hoạt động",
-  },
-  {
-    serviceCode: "KIO_15",
-    serviceName: "Kiosk",
-    serviceDescribe: "Ngưng hoạt động",
-    status: "Ngưng hoạt động",
-  },
-];
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../app/store";
+import { useAppSelector } from "../../hooks/hooks";
+import { fetchService } from "../../features/serviceSlice";
+// const sampleService = [
+//   {
+//     serviceCode: "KIO_01",
+//     serviceName: "Kiosk",
+//     serviceDescribe: "Hoạt động",
+//     status: "Hoạt động",
+//   },
+//   {
+//     serviceCode: "KIO_02",
+//     serviceName: "Kiosk",
+//     serviceDescribe: "Ngưng hoạt động",
+//     status: "Ngưng hoạt động",
+//   },
+//   {
+//     serviceCode: "KIO_03",
+//     serviceName: "Kiosk",
+//     serviceDescribe: "Hoạt động",
+//     status: "Hoạt động",
+//   },
+//   {
+//     serviceCode: "KIO_04",
+//     serviceName: "Kiosk",
+//     serviceDescribe: "Hoạt động",
+//     status: "Hoạt động",
+//   },
+//   {
+//     serviceCode: "KIO_05",
+//     serviceName: "Kiosk",
+//     serviceDescribe: "Ngưng hoạt động",
+//     status: "Ngưng hoạt động",
+//   },
+//   {
+//     serviceCode: "KIO_06",
+//     serviceName: "Kiosk",
+//     serviceDescribe: "Hoạt động",
+//     status: "Hoạt động",
+//   },
+//   {
+//     serviceCode: "KIO_07",
+//     serviceName: "Kiosk",
+//     serviceDescribe: "Ngưng hoạt động",
+//     status: "Ngưng hoạt động",
+//   },
+//   {
+//     serviceCode: "KIO_08",
+//     serviceName: "Kiosk",
+//     serviceDescribe: "Hoạt động",
+//     status: "Hoạt động",
+//   },
+//   {
+//     serviceCode: "KIO_09",
+//     serviceName: "Kiosk",
+//     serviceDescribe: "Ngưng hoạt động",
+//     status: "Ngưng hoạt động",
+//   },
+//   {
+//     serviceCode: "KIO_10",
+//     serviceName: "Kiosk",
+//     serviceDescribe: "Hoạt động",
+//     status: "Hoạt động",
+//   },
+//   {
+//     serviceCode: "KIO_11",
+//     serviceName: "Kiosk",
+//     serviceDescribe: "Ngưng hoạt động",
+//     status: "Ngưng hoạt động",
+//   },
+//   {
+//     serviceCode: "KIO_12",
+//     serviceName: "Kiosk",
+//     serviceDescribe: "Hoạt động",
+//     status: "Hoạt động",
+//   },
+//   {
+//     serviceCode: "KIO_13",
+//     serviceName: "Kiosk",
+//     serviceDescribe: "Ngưng hoạt động",
+//     status: "Ngưng hoạt động",
+//   },
+//   {
+//     serviceCode: "KIO_14",
+//     serviceName: "Kiosk",
+//     serviceDescribe: "Hoạt động",
+//     status: "Hoạt động",
+//   },
+//   {
+//     serviceCode: "KIO_15",
+//     serviceName: "Kiosk",
+//     serviceDescribe: "Ngưng hoạt động",
+//     status: "Ngưng hoạt động",
+//   },
+// ];
 const optionActive = [
   { label: "Tất cả", value: "tatca" },
   { label: "Hoạt động", value: "hoatdong" },
@@ -106,6 +110,8 @@ const optionActive = [
 ];
 
 const Service = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { service, loading, error } = useAppSelector((state) => state.service);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("tatca");
   const handleSelect = (value: string) => {
@@ -117,7 +123,10 @@ const Service = () => {
     setSearchTerm(value);
     console.log("Search input:", value);
   };
-  const filteredServices = sampleService.filter((service) => {
+  useEffect(() => {
+    dispatch(fetchService());
+  }, [dispatch]);
+  const filteredServices = service.filter((service) => {
     const matchesSearchTerm =
       service.serviceCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
       service.serviceName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -158,7 +167,7 @@ const Service = () => {
                   <div className="col-4">
                     <p>Chọn thời gian</p>
                     <div className="d-flex align-items-center device-dropdown">
-                      {/* <DateRangePicker /> */}
+                      <DateRangePicker />
                     </div>
                   </div>
                   <div className="col-5 d-flex justify-content-end align-items-center">

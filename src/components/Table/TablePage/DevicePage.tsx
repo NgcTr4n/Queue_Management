@@ -3,14 +3,18 @@ import React, { useState, useEffect } from "react";
 import TableComponent from "../TableComponent";
 import PaginationComponent from "../PaginationComponent";
 import { useNavigate } from "react-router-dom";
+import ServiceNameWithSeeMore from "./ServiceNameWithSeeMore"; // Adjust the path as needed
 
 type TableRow = {
+  id: string;
   deviceCode: string;
   deviceName: string;
   ipAddress: string;
+  serviceName: string;
+  deviceType: string;
+  accountName: string;
   status: string;
   connection: string;
-  services: string;
 };
 
 type DevicePageProps = {
@@ -26,12 +30,12 @@ const DevicePage: React.FC<DevicePageProps> = ({ devices }) => {
     { label: "Địa chỉ IP", key: "ipAddress" },
     { label: "Trạng thái hoạt động", key: "status" },
     { label: "Trạng thái kết nối", key: "connection" },
-    { label: "Dịch vụ sử dụng", key: "services" },
+    { label: "Dịch vụ sử dụng", key: "serviceName" },
     { label: "", key: "detail" },
     { label: "", key: "update" },
   ];
 
-  const itemsPerPage = 8; // Define how many items to show per page
+  const itemsPerPage = 6; // Define how many items to show per page
   const [currentPage, setCurrentPage] = useState(1);
   const [paginatedDevices, setPaginatedDevices] = useState<TableRow[]>([]);
 
@@ -48,23 +52,28 @@ const DevicePage: React.FC<DevicePageProps> = ({ devices }) => {
     setCurrentPage(page);
   };
 
-  const handleDetailClick = (deviceCode: string) => {
-    navigate(`/device/${deviceCode}`);
+  const handleDetailClick = (id: string) => {
+    console.log("Navigating to details for device:", id); // Xem ID tại đây
+
+    navigate(`/device/${id}`);
   };
 
-  const handleUpdateClick = (deviceCode: string) => {
-    navigate(`/device/${deviceCode}/update`);
+  const handleUpdateClick = (id: string) => {
+    navigate(`/device/${id}/update`);
   };
 
   const tableData = paginatedDevices.map((row) => ({
     ...row,
+    serviceName: (
+      <ServiceNameWithSeeMore serviceName={row.serviceName} maxLength={30} />
+    ),
     detail: (
       <div>
         <a
           href="#"
           onClick={(e) => {
             e.preventDefault();
-            handleDetailClick(row.deviceCode);
+            handleDetailClick(row.id);
           }}
         >
           Chi tiết
@@ -77,7 +86,7 @@ const DevicePage: React.FC<DevicePageProps> = ({ devices }) => {
           href="#"
           onClick={(e) => {
             e.preventDefault();
-            handleUpdateClick(row.deviceCode);
+            handleUpdateClick(row.id);
           }}
         >
           Cập nhật

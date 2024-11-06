@@ -3,11 +3,11 @@ import { Form, Row, Col } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./DateRangePicker.css";
-interface DateRangePickerProps {
-  onChange: (range: [Date | null, Date | null]) => void;
-  // other props if necessary
-}
-const DateRangePicker: React.FC<DateRangePickerProps> = ({ onChange }) => {
+// interface DateRangePickerProps {
+//   onChange: (range: [Date | null, Date | null]) => void;
+//   // other props if necessary
+// }
+const DateRangePicker: React.FC = () => {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [isStartDatePickerOpen, setStartDatePickerOpen] = useState(false);

@@ -4,26 +4,63 @@ import CustomDropdown from "../../components/Dropdown/CustomDropdown";
 import ButtonFormAdd from "../../components/Button/ButtonForm/ButtonFormAdd/ButtonFormAdd";
 import ButtonFormCancel from "../../components/Button/ButtonForm/ButtonFormCancel/ButtonFormCancel";
 import { useNavigate, useParams } from "react-router-dom";
-const optionsRole = [
-  { label: "Kiosk", value: "kiosk" },
-  { label: "Display counter", value: "displaycounter" },
-];
-
-const optionsStatus = [
-  { label: "Hoạt động", value: "hoatdong" },
-  { label: "Ngưng hoạt động", value: "ngunghoatdong" },
-];
-
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { fetchAccount, updateData } from "../../features/accountSlice";
+import { fetchRole } from "../../features/roleSlice";
 type AccountData = {
   accountName: string;
   fullName: string;
   phoneNumber: string;
   email: string;
   roleName: string;
+  password: string;
+  rePassword: string;
   status: string;
 };
+interface RoleOption {
+  label: string;
+  value: string;
+}
+// const optionsRole = [
+//   { label: "Kế toán", value: "Kế toán" },
+//   { label: "Bác sĩ", value: "Bác sĩ" },
+//   {
+//     label: "Lễ tân",
+//     value: "Lễ tân",
+//   },
+//   { label: "Quản lý", value: "Quản lý" },
+//   { label: "Admin", value: "Admin" },
+// ];
+
+const optionsStatus = [
+  { label: "Hoạt động", value: "Hoạt động" },
+  { label: "Ngưng hoạt động", value: "Ngưng hoạt động" },
+];
 
 const AccountManagementUpdate = () => {
+  const { id } = useParams<{ id: string }>();
+  const dispatch = useAppDispatch();
+  const [optionsRole, setOptionsRole] = useState<RoleOption[]>([]);
+
+  // Assuming the state has the following shape
+  const { account, loading, error } = useAppSelector((state) => state.account);
+  useEffect(() => {
+    const loadRoles = async () => {
+      try {
+        const roles = await dispatch(fetchRole()).unwrap();
+        const roleOptions: RoleOption[] = roles.map((role) => ({
+          label: role.roleName,
+          value: role.roleName,
+        }));
+        setOptionsRole(roleOptions);
+      } catch (error) {
+        console.error("Failed to fetch roles:", error);
+      }
+    };
+
+    loadRoles();
+  }, [dispatch]);
+
   const { accountName, fullName, phoneNumber, email, roleName, status } =
     useParams<{
       accountName: string;
@@ -31,6 +68,8 @@ const AccountManagementUpdate = () => {
       phoneNumber: string;
       email: string;
       roleName: string;
+      password: string;
+      rePassword: string;
       status: string;
     }>();
   const navigate = useNavigate();
@@ -41,22 +80,27 @@ const AccountManagementUpdate = () => {
     phoneNumber: "",
     email: "",
     roleName: "",
+    password: "",
+    rePassword: "",
     status: "",
   });
   useEffect(() => {
-    const fetchAccountData = async () => {
-      const mockData = {
-        roleName: roleName || "DEV001",
-        accountName: accountName || "Sample description", // Sample data
-        fullName: fullName || "Sample description", // Sample data
-        phoneNumber: phoneNumber || "Sample description", // Sample data
-        email: email || "Sample description", // Sample data
-        status: status || "Sample description", // Sample data
-      };
-      setAccountData(mockData);
-    };
-    fetchAccountData();
-  }, []); // Use empty array if this is only run on component mount
+    if (id) {
+      dispatch(fetchAccount()); // Fetch the account data by ID
+    }
+  }, [dispatch, id]);
+  useEffect(() => {
+    if (id && account) {
+      const foundAccount = account.find((a) => a.id === id);
+      if (foundAccount) {
+        setAccountData({
+          ...foundAccount,
+          password: foundAccount.password,
+          rePassword: foundAccount.rePassword,
+        }); // Reset password fields
+      }
+    }
+  }, [account, id]);
   const [password, setPassword] = useState("");
   const [rePassword, setRePassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -84,17 +128,27 @@ const AccountManagementUpdate = () => {
     navigate("/setting/accountmanagement");
   };
 
-  const updateAccount = () => {
-    // Perform validation here if necessary
-    if (password !== rePassword) {
+  const updateAccount = async () => {
+    if (accountData.password !== accountData.rePassword) {
       alert("Mật khẩu không khớp!");
       return;
     }
 
-    // Send `accountData` and password to the API for update
-    console.log("Updating account with data:", { ...accountData, password });
-    navigate("/setting/accountmanagement");
-    console.log("Cập nhật thành công");
+    if (id) {
+      const updatedData = {
+        ...accountData,
+        id,
+      };
+
+      try {
+        await dispatch(updateData(updatedData)).unwrap();
+        navigate("/setting/accountmanagement");
+        alert("Cập nhật thành công");
+      } catch (err) {
+        console.error("Failed to update account:", err);
+        alert("Failed to update account. Please try again later.");
+      }
+    }
   };
 
   return (
@@ -200,8 +254,13 @@ const AccountManagementUpdate = () => {
                           id="password"
                           name="password"
                           placeholder="Nhập mật khẩu"
-                          onChange={(e) => setPassword(e.target.value)}
-                          value={password}
+                          onChange={(e) =>
+                            setAccountData({
+                              ...accountData,
+                              password: e.target.value,
+                            })
+                          }
+                          value={accountData.password}
                         />
                         <button
                           type="button"
@@ -316,8 +375,13 @@ const AccountManagementUpdate = () => {
                           id="rePassword"
                           name="rePassword"
                           placeholder="Nhập lại mật khẩu"
-                          value={rePassword}
-                          onChange={(e) => setRePassword(e.target.value)}
+                          value={accountData.rePassword}
+                          onChange={(e) =>
+                            setAccountData({
+                              ...accountData,
+                              rePassword: e.target.value,
+                            })
+                          }
                         />
                         <button
                           type="button"
